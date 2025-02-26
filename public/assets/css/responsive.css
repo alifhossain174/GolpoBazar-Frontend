@@ -1,0 +1,102 @@
+@media (max-width: 768px) { /* Adjust for tablets and smaller screens */
+    
+}
+
+@media (max-width: 576px) { /* Adjust for mobile screens */
+    body {
+        padding-top: 100px;
+    }
+
+    /* navbar css */
+    a.navbar-brand img{
+        width: 45px !important;
+        height: 45px !important;
+    }
+    button.cart_btn {
+        margin-left: 0px !important;
+        margin-top: 10px;
+    }
+
+    /* today choice css */
+    .todays_choice h4{
+        margin-bottom: 16px;
+    }
+    .todays_choice img{
+        height: 350px;
+    }
+    .todays_choice .todays_choice_content a.todays_choice_book_title{
+        margin-top: 14px;
+        margin-bottom: 0px;
+        font-size: 22px;
+    }
+    .todays_choice .todays_choice_content p{
+        margin-top: 10px;
+        font-size: 14px;
+    }
+    .todays_choice .todays_choice_content h5.price{
+        font-size: 24px;
+    }
+
+    /* book category */
+    .books_category {
+        margin-bottom: 40px;
+    }
+    .books_category h4.section_title{
+        font-size: 18px;
+    }
+    .books_category a.book_category_visit {
+        padding: 4px 10px;
+        font-weight: 600;
+        line-height: 28px;
+        font-size: 14px;
+        text-shadow: none;
+    }
+    .books_category .book img.book_image{
+        height: 330px;
+    }
+    .books_category .book .overlay .book_price {
+        font-size: 26px;
+    }
+
+    /* author section css */
+    .author_section {
+        margin-top: 40px !important;
+        margin-bottom: 40px !important;
+    }
+    .author_section h4.author_section_title {
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+    .author_section .author_card{
+        padding: 16px;
+        margin-bottom: 16px;
+    }
+    .author_section .author_card .author_image{
+        height: 100px;
+        width: 100px;
+    }
+    .author_section .author_card .author_content h5.author_name{
+        font-size: 16px;
+    }
+    .author_section .author_card .author_content p.author_bio{
+        font-size: 14px;
+    }
+    .author_section .author_card .author_content a.author_books {
+        padding: 4px 10px;
+        font-size: 14px;
+    }
+    .author_section #bookAuthorCarousel .carousel-indicators {
+        bottom: -30px !important;
+    }
+
+    /* footer css */
+    .footer{
+        margin-top: 40px !important;
+    }
+    .footer span.copyright_text{
+        line-height: 18px;
+    }
+    footer ul.nav{
+        text-align: center !important;
+    }
+}

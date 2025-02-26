@@ -1,0 +1,66 @@
+<!-- random pick -->
+<section>
+    <div class="container">
+        <div class="todays_choice">
+            <div class="row">
+                <div class="col-lg-1">
+                    <h4>Random Pick</h4>
+                </div>
+                <div class="col-lg-3 text-center">
+                    <img class="img-fluid lazy" src="{{ url('assets') }}/images/product-load.gif"
+                    data-src="{{ url(env('ADMIN_URL') . '/' . $randomBook->image) }}" alt="">
+                </div>
+                <div class="col-lg-8">
+                    <div class="todays_choice_content">
+                        <a href="{{url('book')}}/{{$randomBook->slug}}" class="d-block todays_choice_book_title">{{$randomBook->name}}</a>
+                        <a href="{{url('book')}}/{{$randomBook->slug}}" class="d-block todays_choice_book_author">{{$randomBook->author_name}}</a>
+
+                        @php
+                            $productReviews = DB::table('product_reviews')->where('product_id', $randomBook->id)->get();
+                            $productRating = DB::table('product_reviews')->where('product_id', $randomBook->id)->sum('rating');
+                        @endphp
+
+                        @if(count($productReviews) > 0)
+                            @for ($i=1;$i<=round($productRating/count($productReviews));$i++)
+                            <i class="fas fa-star rating"></i>
+                            @endfor
+
+                            @for ($i=1;$i<=5-round($productRating/count($productReviews));$i++)
+                            <i class="far fa-star rating"></i>
+                            @endfor
+                        @else
+                            <i class="far fa-star rating"></i>
+                            <i class="far fa-star rating"></i>
+                            <i class="far fa-star rating"></i>
+                            <i class="far fa-star rating"></i>
+                            <i class="far fa-star rating"></i>
+                        @endif
+
+                        <p>
+                            @php
+                                $randBookFullDes = strip_tags($randomBook->description);
+                                $randomBookDescription = (mb_strlen($randBookFullDes, 'UTF-8') > 500) ? mb_substr($randBookFullDes, 0, 500, 'UTF-8') . "..." : $randBookFullDes;
+                            @endphp
+                            {{$randomBookDescription}}
+                        </p>
+
+                        <h6 class="categories">Category</h6>
+                        <span class="badge text-bg-secondary">{{$randomBook->category_name}}</span>
+
+                        <h5 class="price">
+                            @if($randomBook->discount_price && $randomBook->discount_price < $randomBook->price)
+                            <small><del>BDT {{number_format($randomBook->price)}}</del></small>
+                            BDT {{number_format($randomBook->discount_price)}}
+                            @else
+                            BDT {{number_format($randomBook->price)}}
+                            @endif
+                        </h5>
+
+                        <button class="btn add_to_cart"><i class="fas fa-cart-plus"></i> Add to Cart</button>
+                        <button onclick="socialShare('{{$randomBook->slug}}')" class="btn social-share-btn"><i class="fas fa-share-alt"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
