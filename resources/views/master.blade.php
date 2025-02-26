@@ -57,7 +57,7 @@
                         <a class="nav-link" href="{{url('/shop')}}">Books</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="authors.html">Authors</a>
+                        <a class="nav-link" href="{{url('/authors')}}">Authors</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="publishers.html">Publishers</a>

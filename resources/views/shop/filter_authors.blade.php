@@ -3,7 +3,7 @@
     <div class="filter-list">
         @foreach ($bookAuthors as $bookAuthor)
         <div class="filter-item">
-            <input type="checkbox" id="{{$bookAuthor->id}}" value="{{$bookAuthor->id}}" name="filter_author[]" @if(isset($authorIds) && in_array($bookAuthor->id, explode(",", $authorIds))) checked @endif onchange="filterProducts()">
+            <input type="checkbox" id="{{$bookAuthor->id}}" value="{{$bookAuthor->id}}" name="filter_author[]" @if(isset($authorSlug) && in_array($bookAuthor->id, explode(",", $authorSlug))) checked @endif onchange="filterProducts()">
             <label for="{{$bookAuthor->id}}">{{$bookAuthor->name}}</label>
             <span class="count">{{DB::table('products')->where('author_id', $bookAuthor->id)->where('status', 1)->count()}}</span>
         </div>

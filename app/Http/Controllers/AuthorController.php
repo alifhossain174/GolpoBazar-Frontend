@@ -5,65 +5,34 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class FrontendController extends Controller
+class AuthorController extends Controller
 {
-    public function index()
-    {
-        $randomBook = DB::table('products')
-                        ->leftJoin('users', 'products.author_id', 'users.id')
-                        ->leftJoin('categories', 'products.category_id', 'categories.id')
-                        ->select('products.*', 'users.name as author_name', 'categories.name as category_name')
-                        ->where('products.status', 1)
-                        ->inRandomOrder()
-                        ->first();
-
-        $categories = DB::table('categories')->where('status', 1)->orderBy('serial', 'asc')->get();
-        $bookAuthors = DB::table('users')->where('status', 1)->where('user_type', 2)->inRandomOrder()->limit(8)->get();
-
-        return view('index', compact('randomBook', 'categories', 'bookAuthors'));
+    public function authors(){
+        $authors = DB::table('users')->where('status', 1)->where('user_type', 2)->orderBy('id', 'desc')->paginate(16);
+        return view('authors', compact('authors'));
     }
 
-    public function bookDetails($slug){
+    public function authorBooks(Request $request, $slug){
 
-        $book = DB::table('products')
-                ->leftJoin('users', 'products.author_id', 'users.id')
-                ->leftJoin('categories', 'products.category_id', 'categories.id')
-                ->leftJoin('brands', 'products.brand_id', 'brands.id')
-                ->select('products.*', 'users.name as author_name', 'categories.name as category_name', 'brands.name as publisher')
-                ->where('products.slug', $slug)
-                ->first();
+        $authorInfo = DB::table('users')->where('id', $slug)->orderBy('id', 'desc')->first();
+        $filterData = DB::table('products')->select('category_id', 'brand_id')->where('status', 1)->where('author_id', $slug)->get();
+        $categoryIds = $filterData->pluck('category_id')->toArray();
+        $publisherIds = $filterData->pluck('brand_id')->toArray();
 
-        $relatedBooks = DB::table('products')
-                        ->leftJoin('users', 'products.author_id', 'users.id')
-                        ->leftJoin('categories', 'products.category_id', 'categories.id')
-                        ->select('products.*', 'users.name as author_name', 'categories.name as category_name')
-                        ->where('products.category_id', $book->category_id)
-                        ->where('products.id', '!=', $book->id)
-                        ->inRandomOrder()
-                        ->limit(10)
-                        ->get();
-
-        return view('book_details.details', compact('book', 'relatedBooks'));
-
-    }
-
-    public function shop(Request $request){
-
-        $categories = DB::table('categories')->where('status', 1)->orderBy('serial', 'asc')->get();
-        $bookAuthors = DB::table('users')->where('status', 1)->where('user_type', 2)->inRandomOrder()->get();
-        $publishers = DB::table('brands')->where('status', 1)->orderBy('serial', 'asc')->get();
+        $categories = DB::table('categories')->where('status', 1)->whereIn('id', $categoryIds)->orderBy('serial', 'asc')->get();
+        $publishers = DB::table('brands')->where('status', 1)->whereIn('id', $publisherIds)->orderBy('serial', 'asc')->get();
 
         $query = DB::table('products')
                     ->leftJoin('users', 'products.author_id', 'users.id')
                     ->leftJoin('categories', 'products.category_id', '=', 'categories.id')
                     ->leftJoin('brands', 'products.brand_id', 'brands.id')
                     ->select('products.*', 'users.name as author_name', 'categories.name as category_name', 'brands.name as publisher')
-                    ->where('products.status', 1);
+                    ->where('products.status', 1)
+                    ->where('products.author_id', $slug);
 
         // ============== applying filters from url parameter start ================
         $parameters = '';
         $categorySlug = isset($request->category) ? $request->category : '';
-        $authorSlug = isset($request->author) ? $request->author : '';
         $publisherSlug = isset($request->publisher) ? $request->publisher : '';
         $sort_by = isset($request->sort_by) ? $request->sort_by : '';
         $search_keyword = isset($request->search_keyword) ? $request->search_keyword : '';
@@ -71,10 +40,6 @@ class FrontendController extends Controller
         if($categorySlug){
             $query->whereIn('categories.slug', explode(",", $categorySlug));
             $parameters == '' ? $parameters .= '?category=' . $categorySlug : $parameters .= '&category=' . $categorySlug;
-        }
-        if($authorSlug){
-            $query->whereIn('users.id', explode(",", $authorSlug));
-            $parameters == '' ? $parameters .= '?author=' . $authorSlug : $parameters .= '&author=' . $authorSlug;
         }
         if($publisherSlug){
             $query->whereIn('brands.slug', explode(",",$publisherSlug));
@@ -103,11 +68,12 @@ class FrontendController extends Controller
 
         $books = $query->paginate(12);
         $books->withPath('/shop'.$parameters);
-        return view('shop.shop', compact('books', 'bookAuthors', 'categories', 'publishers', 'categorySlug', 'publisherSlug', 'authorSlug', 'sort_by', 'search_keyword'));
+        return view('author_shop.shop', compact('authorInfo', 'books', 'categories', 'publishers', 'categorySlug', 'publisherSlug', 'sort_by', 'search_keyword'));
 
     }
 
-    public function filterProducts(Request $request){
+
+    public function filterAuthorBooks(Request $request){
 
         // main query
         $query = DB::table('products')
@@ -115,13 +81,13 @@ class FrontendController extends Controller
                 ->leftJoin('categories', 'products.category_id', '=', 'categories.id')
                 ->leftJoin('brands', 'products.brand_id', 'brands.id')
                 ->select('products.*', 'users.name as author_name', 'categories.name as category_name', 'brands.name as publisher')
+                ->where('products.author_id', $request->author)
                 ->where('products.status', 1);
 
 
         // ============== applying filters from url parameter start ================
         $parameters = '';
         $categorySlug = isset($request->category) ? $request->category : '';
-        $authorSlug = isset($request->author) ? $request->author : '';
         $publisherSlug = isset($request->publisher) ? $request->publisher : '';
         $sort_by = isset($request->sort_by) ? $request->sort_by : '';
         $search_keyword = isset($request->search_keyword) ? $request->search_keyword : '';
@@ -129,10 +95,6 @@ class FrontendController extends Controller
         if($categorySlug){
             $query->whereIn('categories.slug', explode(",", $categorySlug));
             $parameters == '' ? $parameters .= '?category=' . $categorySlug : $parameters .= '&category=' . $categorySlug;
-        }
-        if($authorSlug){
-            $query->whereIn('users.id', explode(",", $authorSlug));
-            $parameters == '' ? $parameters .= '?author=' . $authorSlug : $parameters .= '&author=' . $authorSlug;
         }
         if($publisherSlug){
             $query->whereIn('brands.slug', explode(",",$publisherSlug));
@@ -162,10 +124,8 @@ class FrontendController extends Controller
         $books = $query->paginate(12);
         $books->withPath('/shop'.$parameters);
 
-        $returnHTML = view('shop.products', compact('books'))->render();
+        $returnHTML = view('author_shop.products', compact('books'))->render();
         return response()->json(['rendered_view' => $returnHTML]);
 
     }
-
-
 }
