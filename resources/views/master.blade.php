@@ -200,19 +200,26 @@
         });
 
         $('body').on('click', '.addToCart', function() {
-            var id = $(this).data('id');
-            $.get("{{ url('add/to/cart') }}" + '/' + id, function(data) {
-                toastr.options.positionClass = 'toast-bottom-right';
-                toastr.options.timeOut = 1000;
-                toastr.success("Added to Cart");
-                $("#dropdown_box_sidebar_cart").html(data.rendered_cart);
-                $("span.cart-count").html(data.cartTotalQty);
-            })
-            $(this).html("Remove");
-            $(this).removeClass("addToCart");
-            $(this).addClass("removeFromCart");
-            $(this).blur();
+
+            toastr.success("Added to Cart");
+
+            // var id = $(this).data('id');
+            // $.get("{{ url('add/to/cart') }}" + '/' + id, function(data) {
+            //     toastr.options.positionClass = 'toast-bottom-right';
+            //     toastr.options.timeOut = 1000;
+            //     toastr.success("Added to Cart");
+            //     $("#dropdown_box_sidebar_cart").html(data.rendered_cart);
+            //     $("span.cart-count").html(data.cartTotalQty);
+            // })
+            // $(this).html("Remove");
+            // $(this).removeClass("addToCart");
+            // $(this).addClass("removeFromCart");
+            // $(this).blur();
         });
+
+        function addToCart() {
+            toastr.success("Added to Cart");
+        }
 
         function socialShare(url) {
             navigator.clipboard.writeText("{{ env('APP_URL') }}/book/"+url);

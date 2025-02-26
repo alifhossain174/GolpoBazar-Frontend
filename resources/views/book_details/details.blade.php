@@ -59,7 +59,7 @@
                                 @endif
                             </h5>
 
-                            <button class="btn add_to_cart"><i class="fas fa-cart-plus"></i> Add to Cart</button>
+                            <button data-id="{{$book->id}}" class="cart-{{$book->id}} addToCart btn add_to_cart"><i class="fas fa-cart-plus"></i> Add to Cart</button>
                             <button onclick="socialShare('{{$book->slug}}')" class="btn social-share-btn"><i class="fas fa-share-alt"></i></button>
                         </div>
 
