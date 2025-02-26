@@ -51,16 +51,16 @@
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav me-auto mb-2 mb-md-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{{ url('/') }}">Home</a>
+                        <a class="nav-link @if(Request::path() == '/') active @endif" href="{{ url('/') }}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{url('/shop')}}">Books</a>
+                        <a class="nav-link @if(Request::path() == 'shop') active @endif" href="{{url('/shop')}}">Books</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{url('/authors')}}">Authors</a>
+                        <a class="nav-link @if(Request::path() == 'authors') active @endif" href="{{url('/authors')}}">Authors</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="publishers.html">Publishers</a>
+                        <a class="nav-link @if(Request::path() == 'publishers') active @endif" href="{{url('/publishers')}}">Publishers</a>
                     </li>
                 </ul>
 

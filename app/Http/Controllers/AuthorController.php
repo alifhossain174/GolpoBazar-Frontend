@@ -14,7 +14,7 @@ class AuthorController extends Controller
 
     public function authorBooks(Request $request, $slug){
 
-        $authorInfo = DB::table('users')->where('id', $slug)->orderBy('id', 'desc')->first();
+        $authorInfo = DB::table('users')->where('id', $slug)->first();
         $filterData = DB::table('products')->select('category_id', 'brand_id')->where('status', 1)->where('author_id', $slug)->get();
         $categoryIds = $filterData->pluck('category_id')->toArray();
         $publisherIds = $filterData->pluck('brand_id')->toArray();

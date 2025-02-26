@@ -6,6 +6,9 @@
             box-shadow: none !important;
             background: transparent !important;
         }
+        .publishers .publisher_box .publisher_content h5.publisher_name{
+            font-size: 16px;
+        }
     </style>
 @endsection
 

@@ -27,7 +27,6 @@
                         @include('shop.filter_sorting')
                         @include('shop.filter_category')
                         @include('shop.filter_authors')
-                        @include('shop.filter_publishers')
 
                     </div>
                 </div>
@@ -80,7 +79,6 @@
             // fetching filter values
             let category_array = [];
             let author_array = [];
-            let publisher_array = [];
 
             $("input[name='filter_category[]']").each(function() {
                 if ($(this).is(':checked')) {
@@ -96,17 +94,9 @@
                     }
                 }
             });
-            $("input[name='filter_publisher[]']").each(function() {
-                if ($(this).is(':checked')) {
-                    if (!publisher_array.includes($(this).val())) {
-                        publisher_array.push($(this).val());
-                    }
-                }
-            });
 
             let category_slugs = String(category_array);
             let author_slugs = String(author_array);
-            let publisher_slugs = String(publisher_array);
             var sort_by = Number($("#filter_sort_by").val());
             var search_keyword = $("#search_keyword").val();
 
@@ -119,9 +109,6 @@
             }
             if (author_slugs) {
                 baseUrl.indexOf('?') !== -1 ? baseUrl += '&author=' + author_slugs : baseUrl += '?author=' + author_slugs;
-            }
-            if (publisher_slugs) {
-                baseUrl.indexOf('?') !== -1 ? baseUrl += '&publisher=' + publisher_slugs : baseUrl += '?publisher=' + publisher_slugs;
             }
             if (sort_by && sort_by > 0) {
                 baseUrl.indexOf('?') !== -1 ? baseUrl += '&sort_by=' + sort_by : baseUrl += '?sort_by=' + sort_by;
@@ -136,14 +123,14 @@
             var formData = new FormData();
             formData.append("category", category_slugs);
             formData.append("author", author_slugs);
-            formData.append("publisher", publisher_slugs);
+            formData.append("publisher", {{ $publisherInfo->id }});
             formData.append("sort_by", sort_by);
             formData.append("search_keyword", search_keyword);
             formData.append("path_name", window.location.pathname);
 
             $.ajax({
                 data: formData,
-                url: "{{ url('filter/books') }}",
+                url: "{{ url('filter/publisher/books') }}",
                 type: "POST",
                 cache: false,
                 contentType: false,
