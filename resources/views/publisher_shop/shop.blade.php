@@ -12,6 +12,31 @@
 @section('content')
 
 <section>
+    <div class="publisher_author_wise_books">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="publisher_author_box">
+
+                        @if($publisherInfo->logo)
+                            <img class="publisher_author_image lazy" src="{{ url('assets') }}/images/product-load.gif" data-src="{{ url(env('ADMIN_URL') . '/' . $publisherInfo->logo) }}" alt="">
+                        @else
+                            <img class="publisher_author_image lazy" src="{{ url('assets') }}/images/product-load.gif" data-src="{{ url('assets') }}/images/authors/author.png" alt="">
+                        @endif
+
+                        <div class="publisher_author_content w-100">
+                            <h3>{{$publisherInfo->name}}</h3>
+                            <span>Total Books: {{DB::table('products')->where('brand_id', $publisherInfo->id)->where('status', 1)->count()}}</span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section>
     <div class="book_shop">
         <div class="container">
             <div class="row">

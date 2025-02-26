@@ -16,7 +16,7 @@
                         @endif
                     </div>
                     <div class="col text-end">
-                        <button onclick="addToCart()" class="add-to-cart-btn"><i class="fas fa-cart-plus"></i></button>
+                        <button data-id="{{$book->id}}" class="cart-{{$book->id}} addToCart add-to-cart-btn"><i class="fas fa-cart-plus"></i></button>
                         <button onclick="socialShare('{{$book->slug}}')" class="social-share-btn"><i class="fas fa-share-alt"></i></button>
                     </div>
                 </div>

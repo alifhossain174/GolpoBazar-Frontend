@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\PublisherController;
+use App\Http\Controllers\CartController;
 
 
 Auth::routes();
@@ -23,6 +24,15 @@ Route::post('/filter/author/books', [AuthorController::class, 'filterAuthorBooks
 Route::get('/publishers', [PublisherController::class, 'publishers'])->name('Publishers');
 Route::get('/publisher/books/{slug}', [PublisherController::class, 'publisherBooks'])->name('PublisherBooks');
 Route::post('/filter/publisher/books', [PublisherController::class, 'filterPublisherBooks'])->name('FilterPublisherBooks');
+
+
+// cart
+Route::get('add/to/cart/{id}', [CartController::class, 'addToCart'])->name('AddToCart');
+Route::post('add/to/cart/with/qty', [CartController::class, 'addToCartWithQty'])->name('AddToCartWithQty');
+Route::get('remove/cart/item/{id}', [CartController::class, 'removeCartTtem'])->name('RemoveCartTtem');
+Route::post('update/cart/qty', [CartController::class, 'updateCartQty'])->name('UpdateCartQty');
+Route::get('view/cart', [CartController::class, 'viewCart'])->name('ViewCart');
+Route::get('clear/cart', [CartController::class, 'clearCart'])->name('ClearCart');
 
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

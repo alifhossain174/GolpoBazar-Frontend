@@ -40,7 +40,7 @@
 <body>
 
     <!-- header -->
-    <nav class="navbar navbar-expand-md fixed-top bg-white">
+    <nav class="navbar navbar-expand-md fixed-top" style="background-color: white">
         <div class="container">
             <a class="navbar-brand" href="{{ url('/') }}">
                 <img src="{{ url(env('ADMIN_URL') . '/' . $generalInfo->logo) }}" alt="{{ $generalInfo->company_name }}" width="50" height="50" class="d-inline-block align-text-top">
@@ -107,27 +107,27 @@
                     <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
 
                         @if($generalInfo->facebook)
-                        <li class="ms-4"><a class="footer_icon" href="{{$generalInfo->facebook}}"><i class="fab fa-facebook-square"></i></a></li>
+                        <li class="ms-4"><a class="footer_icon" href="{{$generalInfo->facebook}}"><i class="fab fa-facebook-square" style="color: #1877F2"></i></a></li>
                         @endif
 
                         @if($generalInfo->twitter)
-                        <li class="ms-4"><a class="footer_icon" href="{{$generalInfo->twitter}}"><i class="fab fa-twitter"></i></a></li>
+                        <li class="ms-4"><a class="footer_icon" href="{{$generalInfo->twitter}}"><i class="fab fa-twitter" style="color: #1da1f2"></i></a></li>
                         @endif
 
                         @if($generalInfo->instagram)
-                        <li class="ms-4"><a class="footer_icon" href="{{$generalInfo->instagram}}"><i class="fab fa-instagram"></i></a></li>
+                        <li class="ms-4"><a class="footer_icon" href="{{$generalInfo->instagram}}"><i class="fab fa-instagram" style="color: #fccc63"></i></a></li>
                         @endif
 
                         @if($generalInfo->linkedin)
-                        <li class="ms-4"><a class="footer_icon" href="{{$generalInfo->linkedin}}"><i class="fab fa-linkedin"></i></a></li>
+                        <li class="ms-4"><a class="footer_icon" href="{{$generalInfo->linkedin}}"><i class="fab fa-linkedin" style="color: #0077B5"></i></a></li>
                         @endif
 
                         @if($generalInfo->telegram)
-                        <li class="ms-4"><a class="footer_icon" href="{{$generalInfo->telegram}}"><i class="fab fa-telegram"></i></a></li>
+                        <li class="ms-4"><a class="footer_icon" href="{{$generalInfo->telegram}}"><i class="fab fa-telegram" style="color: #0088cc"></i></a></li>
                         @endif
 
                         @if($generalInfo->youtube)
-                        <li class="ms-4"><a class="footer_icon" href="{{$generalInfo->youtube}}"><i class="fab fa-youtube"></i></a></li>
+                        <li class="ms-4"><a class="footer_icon" href="{{$generalInfo->youtube}}"><i class="fab fa-youtube" style="color: red"></i></a></li>
                         @endif
 
                     </ul>
@@ -199,9 +199,20 @@
             }
         });
 
-        function addToCart() {
-            alert('Added to cart');
-        }
+        $('body').on('click', '.addToCart', function() {
+            var id = $(this).data('id');
+            $.get("{{ url('add/to/cart') }}" + '/' + id, function(data) {
+                toastr.options.positionClass = 'toast-bottom-right';
+                toastr.options.timeOut = 1000;
+                toastr.success("Added to Cart");
+                $("#dropdown_box_sidebar_cart").html(data.rendered_cart);
+                $("span.cart-count").html(data.cartTotalQty);
+            })
+            $(this).html("Remove");
+            $(this).removeClass("addToCart");
+            $(this).addClass("removeFromCart");
+            $(this).blur();
+        });
 
         function socialShare(url) {
             navigator.clipboard.writeText("{{ env('APP_URL') }}/book/"+url);
