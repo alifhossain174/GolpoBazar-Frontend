@@ -49,10 +49,10 @@
 
                         <h5 class="price">
                             @if($randomBook->discount_price && $randomBook->discount_price < $randomBook->price)
-                            <small><del>BDT {{number_format($randomBook->price)}}</del></small>
-                            BDT {{number_format($randomBook->discount_price)}}
+                            <small><del>{{number_format($randomBook->price)}}<sup>৳</sup></del></small>
+                            {{number_format($randomBook->discount_price)}}<sup>৳</sup>
                             @else
-                            BDT {{number_format($randomBook->price)}}
+                            {{number_format($randomBook->price)}}<sup>৳</sup>
                             @endif
                         </h5>
 

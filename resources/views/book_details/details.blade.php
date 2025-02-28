@@ -14,7 +14,8 @@
                         <div class="book_details_content">
                             <h2 class="book_name">{{$book->name}}</h2>
                             <a href="authors.html" class="author_name">{{$book->author_name}}</a>
-                            <p class="mb-3">Publisher: <a href="publishers.html">{{$book->publisher}}</a></p>
+                            <p class="mb-0">Publisher: <a href="publishers.html">{{$book->publisher}}</a></p>
+                            <p class="mb-3">Publish Date: <a href="publishers.html">{{date("jS M Y", strtotime($book->created_at))}}</a></p>
 
                             <p class="mb-0">Category: <a href="books.html">{{$book->category_name}}</a></p>
                             <p class="mb-0">Language: {{$book->language}}</p>
@@ -52,10 +53,10 @@
 
                             <h5 class="price">
                                 @if($book->discount_price && $book->discount_price < $book->price)
-                                    <small><del>BDT {{number_format($book->price)}}</del></small>
-                                    BDT {{number_format($book->discount_price)}}
+                                    <small><del>{{number_format($book->price)}}<sup>৳</sup></del></small>
+                                    {{number_format($book->discount_price)}}<sup>৳</sup>
                                 @else
-                                    BDT {{number_format($book->price)}}
+                                    {{number_format($book->price)}}<sup>৳</sup>
                                 @endif
                             </h5>
 

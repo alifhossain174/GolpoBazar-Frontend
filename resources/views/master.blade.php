@@ -226,7 +226,10 @@
                 toastr.options.timeOut = 1000;
                 toastr.error("Removed from Cart");
                 $("strong.cart-count").html(data.cartTotalQty);
+                $("span.view_cart_count").html(data.cartTotalQty);
                 $("#sidebar_cart").html(data.rendered_cart);
+                $("#view_cart_items").html(data.viewCartItems);
+                renderLazyImage();
             })
 
             $('.cart-' + id).html("<i class='fas fa-cart-plus'></i>");

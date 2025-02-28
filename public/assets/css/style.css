@@ -168,8 +168,8 @@ nav .dropdown ul.dropdown-menu li a.checkout_btn:hover{
 
 @media (max-width: 576px) { /* Adjust for mobile screens */
     .books_category .custom-columns > div {
-        flex: 0 0 100%; /* Each column takes full row width */
-        max-width: 100%;
+        flex: 0 0 50%; /* Each column takes full row width */
+        max-width: 50%;
     }
 }
 .books_category .book img.book_image{
@@ -230,12 +230,12 @@ nav .dropdown ul.dropdown-menu li a.checkout_btn:hover{
         font-size: 16px;
     }
     .books_category .book .overlay .add-to-cart-btn {
-        font-size: 0.9rem;
-        padding: 6px 10px;
+        font-size: 0.8rem;
+        padding: 4px 8px;
     }
     .books_category .book .overlay .social-share-btn {
-        font-size: 0.9rem;
-        padding: 6px 10px;
+        font-size: 0.8rem;
+        padding: 4px 8px;
     }
 }
 

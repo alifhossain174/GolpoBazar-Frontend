@@ -1,5 +1,5 @@
 @media (max-width: 768px) { /* Adjust for tablets and smaller screens */
-    
+
 }
 
 @media (max-width: 576px) { /* Adjust for mobile screens */
@@ -52,10 +52,13 @@
         text-shadow: none;
     }
     .books_category .book img.book_image{
-        height: 330px;
+        height: 100%;
+    }
+    .books_category .book .image-container{
+        height: 280px;
     }
     .books_category .book .overlay .book_price {
-        font-size: 26px;
+        font-size: 22px;
     }
 
     /* author section css */

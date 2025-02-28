@@ -10,7 +10,12 @@ class CartController extends Controller
 {
     public function addToCart($id){
 
-        $product = DB::table('products')->where('id', $id)->first();
+        $product = DB::table('products')
+                        ->leftJoin('users', 'products.author_id', 'users.id')
+                        ->select('products.*', 'users.name as author_name')
+                        ->where('products.id', $id)
+                        ->first();
+
         $cart = session()->get('cart', []);
 
         if(isset($cart[$id])) {
@@ -18,6 +23,7 @@ class CartController extends Controller
         } else {
             $cart[$id] = [
                 "name" => $product->name,
+                "author_name" => $product->author_name,
                 "slug" => $product->slug,
                 "quantity" => 1,
                 "price" => $product->price > 0 ? $product->price : 0,
@@ -43,13 +49,13 @@ class CartController extends Controller
         }
 
         $returnHTML = view('sidebar_cart')->render();
-        // $viewCartItems = view('cart.cart_items')->render();
+        $viewCartItems = view('cart_items')->render();
         // $viewCartCalculation = view('cart.cart_calculation')->render();
         // $checkoutCartItems = view('checkout.cart_items')->render();
         // $checkoutTotalAmount = view('checkout.order_total')->render();
         return response()->json([
             'rendered_cart' => $returnHTML,
-            // 'viewCartItems' => $viewCartItems,
+            'viewCartItems' => $viewCartItems,
             // 'viewCartCalculation' => $viewCartCalculation,
             // 'checkoutCartItems' => $checkoutCartItems,
             // 'checkoutTotalAmount' => $checkoutTotalAmount,
@@ -132,7 +138,7 @@ class CartController extends Controller
     }
 
     public function viewCart(){
-        return view('cart.view_cart');
+        return view('view_cart');
     }
 
     public function clearCart(){
