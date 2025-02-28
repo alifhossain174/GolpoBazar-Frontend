@@ -12,8 +12,8 @@
                 </div>
                 <div class="col-lg-8">
                     <div class="todays_choice_content">
-                        <a href="{{url('book')}}/{{$randomBook->slug}}" class="d-block todays_choice_book_title">{{$randomBook->name}}</a>
-                        <a href="{{url('book')}}/{{$randomBook->slug}}" class="d-block todays_choice_book_author">{{$randomBook->author_name}}</a>
+                        <a href="{{url('book')}}/{{$randomBook->slug}}" class="d-inline-block todays_choice_book_title">{{$randomBook->name}}</a><br>
+                        <a href="{{url('author/books')}}/{{$randomBook->author_id}}" class="d-inline-block todays_choice_book_author">{{$randomBook->author_name}}</a><br>
 
                         @php
                             $productReviews = DB::table('product_reviews')->where('product_id', $randomBook->id)->get();
@@ -56,7 +56,12 @@
                             @endif
                         </h5>
 
-                        <button data-id="{{$randomBook->id}}" class="cart-{{$randomBook->id}} addToCart btn add_to_cart"><i class="fas fa-cart-plus"></i> Add to Cart</button>
+                        @if (isset(session()->get('cart')[$randomBook->id]))
+                            <button data-id="{{$randomBook->id}}" class="cart-{{$randomBook->id}} removeFromCart btn add_to_cart"><i class="fas fa-times"></i> Remove from Cart</button>
+                        @else
+                            <button data-id="{{$randomBook->id}}" class="cart-{{$randomBook->id}} addToCart btn add_to_cart"><i class="fas fa-cart-plus"></i> Add to Cart</button>
+                        @endif
+
                         <button onclick="socialShare('{{$randomBook->slug}}')" class="btn social-share-btn"><i class="fas fa-share-alt"></i></button>
                     </div>
                 </div>

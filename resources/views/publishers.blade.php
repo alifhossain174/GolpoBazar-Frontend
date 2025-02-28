@@ -9,6 +9,12 @@
         .publishers .publisher_box .publisher_content h5.publisher_name{
             font-size: 16px;
         }
+
+        .footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }
     </style>
 @endsection
 

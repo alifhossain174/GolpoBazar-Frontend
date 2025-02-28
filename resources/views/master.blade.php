@@ -34,6 +34,12 @@
     <link rel="stylesheet" href="{{url('assets')}}/css/style.css">
     <link rel="stylesheet" href="{{url('assets')}}/css/responsive.css">
 
+    <style>
+        button.removeFromCart{
+            background-color: #de0000 !important;
+        }
+    </style>
+
     @yield('header_css')
 
 </head>
@@ -70,17 +76,10 @@
 
                 <div class="dropdown">
                     <button class="btn ms-2 dropdown cart_btn dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false" id="cartButton">
-                        <strong class="cart-count">3</strong> <i class="fas fa-cart-plus"></i>
+                        <strong class="cart-count">{{ session('cart') ? count(session('cart')) : 0 }}</strong> <i class="fas fa-cart-plus"></i>
                     </button>
-                    <ul class="dropdown-menu" data-bs-popper="static">
-                        <li><a class="dropdown-item" href="#">1 * Book Name-1</a></li>
-                        <li><a class="dropdown-item" href="#">2 * Book Name-2</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li class="text-center">
-                            <a class="btn btn-sm rounded d-inline-block checkout_btn" href="checkout.html"><i class="far fa-share-square"></i> Checkout</a>
-                        </li>
+                    <ul class="dropdown-menu" id="sidebar_cart" data-bs-popper="static">
+                        @include('sidebar_cart')
                     </ul>
                 </div>
 
@@ -200,21 +199,44 @@
         });
 
         $('body').on('click', '.addToCart', function() {
+            var id = $(this).data('id');
+            $.get("{{ url('add/to/cart') }}" + '/' + id, function(data) {
+                toastr.options.positionClass = 'toast-bottom-right';
+                toastr.options.timeOut = 1000;
+                toastr.success("Added to Cart");
+                $("#sidebar_cart").html(data.rendered_cart);
+                $("strong.cart-count").html(data.cartTotalQty);
+            })
 
-            toastr.success("Added to Cart");
+            if ($(this).hasClass('add_to_cart')) {
+                $(this).html("<i class='fas fa-times'></i> Remove from Cart");
+            } else {
+                $(this).html("<i class='fas fa-times'></i>");
+            }
 
-            // var id = $(this).data('id');
-            // $.get("{{ url('add/to/cart') }}" + '/' + id, function(data) {
-            //     toastr.options.positionClass = 'toast-bottom-right';
-            //     toastr.options.timeOut = 1000;
-            //     toastr.success("Added to Cart");
-            //     $("#dropdown_box_sidebar_cart").html(data.rendered_cart);
-            //     $("span.cart-count").html(data.cartTotalQty);
-            // })
-            // $(this).html("Remove");
-            // $(this).removeClass("addToCart");
-            // $(this).addClass("removeFromCart");
-            // $(this).blur();
+            $(this).removeClass("addToCart");
+            $(this).addClass("removeFromCart");
+            $(this).blur();
+        });
+
+        $('body').on('click', '.removeFromCart', function() {
+            var id = $(this).data('id');
+            $.get("{{ url('remove/cart/item') }}" + '/' + id, function(data) {
+                toastr.options.positionClass = 'toast-bottom-right';
+                toastr.options.timeOut = 1000;
+                toastr.error("Removed from Cart");
+                $("strong.cart-count").html(data.cartTotalQty);
+                $("#sidebar_cart").html(data.rendered_cart);
+            })
+
+            $('.cart-' + id).html("<i class='fas fa-cart-plus'></i>");
+            $('.cart-' + id).attr('data-id', id).removeClass("removeFromCart");
+            $('.cart-' + id).attr('data-id', id).addClass("addToCart");
+            $('.cart-' + id).blur();
+
+            if ($(this).hasClass('add_to_cart')) {
+                $(this).html("<i class='fas fa-cart-plus'></i> Add to Cart");
+            }
         });
 
         function addToCart() {

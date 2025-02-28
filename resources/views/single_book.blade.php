@@ -16,7 +16,11 @@
                         @endif
                     </div>
                     <div class="col text-end">
-                        <button data-id="{{$book->id}}" class="cart-{{$book->id}} addToCart add-to-cart-btn"><i class="fas fa-cart-plus"></i></button>
+                        @if (isset(session()->get('cart')[$book->id]))
+                            <button data-id="{{$book->id}}" class="cart-{{$book->id}} removeFromCart add-to-cart-btn"><i class="fas fa-times"></i></button>
+                        @else
+                            <button data-id="{{$book->id}}" class="cart-{{$book->id}} addToCart add-to-cart-btn"><i class="fas fa-cart-plus"></i></button>
+                        @endif
                         <button onclick="socialShare('{{$book->slug}}')" class="social-share-btn"><i class="fas fa-share-alt"></i></button>
                     </div>
                 </div>
