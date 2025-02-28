@@ -15,7 +15,7 @@
                             {{number_format($book->price)}}<sup>৳</sup>
                         @endif
                     </div>
-                    <div class="col text-end">
+                    <div class="col text-end book_actions">
                         @if (isset(session()->get('cart')[$book->id]))
                             <button data-id="{{$book->id}}" class="cart-{{$book->id}} removeFromCart add-to-cart-btn"><i class="fas fa-times"></i></button>
                         @else

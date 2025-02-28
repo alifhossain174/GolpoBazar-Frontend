@@ -55,10 +55,19 @@
         height: 100%;
     }
     .books_category .book .image-container{
-        height: 280px;
+        height: 240px;
     }
     .books_category .book .overlay .book_price {
-        font-size: 22px;
+        font-size: 20px;
+    }
+
+    .books_category .book .overlay .book_actions{
+        padding-left: 0px !important;
+        padding-right: 6px !important;
+    }
+
+    .books_category .book .book_rating i{
+        font-size: 12px;
     }
 
     /* author section css */
