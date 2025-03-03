@@ -33,22 +33,8 @@
                                         </div>
                                         <div class="author_content">
                                             <h5 class="author_name">{{$bookAuthor->name}}</h5>
-                                            <p class="author_bio" style="height: 125px;">
-
-                                                @php
-                                                    $bookAuthorFullBio = strip_tags($bookAuthor->bio);
-                                                    $authorBio = (mb_strlen($bookAuthorFullBio, 'UTF-8') > 200) ? mb_substr($bookAuthorFullBio, 0, 200, 'UTF-8') . "..." : $bookAuthorFullBio;
-                                                @endphp
-
-                                                @if($authorBio)
-                                                    {{$authorBio}}
-                                                @else
-                                                    N/A
-                                                @endif
-
-                                            </p>
                                             <span class="d-block total_books">Total Books: {{DB::table('products')->where('author_id', $bookAuthor->id)->count()}}</span>
-                                            <a href="#" class="d-inline-block author_books">View All books</a>
+                                            <a href="{{url('author/books')}}/{{$bookAuthor->id}}" class="d-inline-block author_books">View All books</a>
                                         </div>
                                     </div>
                                 </div>
@@ -73,22 +59,8 @@
                                         </div>
                                         <div class="author_content">
                                             <h5 class="author_name">{{$bookAuthor->name}}</h5>
-                                            <p class="author_bio" style="height: 125px;">
-
-                                                @php
-                                                    $bookAuthorFullBio = strip_tags($bookAuthor->bio);
-                                                    $authorBio = (mb_strlen($bookAuthorFullBio, 'UTF-8') > 200) ? mb_substr($bookAuthorFullBio, 0, 200, 'UTF-8') . "..." : $bookAuthorFullBio;
-                                                @endphp
-
-                                                @if($authorBio)
-                                                    {{$authorBio}}
-                                                @else
-                                                    N/A
-                                                @endif
-
-                                            </p>
                                             <span class="d-block total_books">Total Books: {{DB::table('products')->where('author_id', $bookAuthor->id)->count()}}</span>
-                                            <a href="#" class="d-inline-block author_books">View All books</a>
+                                            <a href="{{url('author/books')}}/{{$bookAuthor->id}}" class="d-inline-block author_books">View All books</a>
                                         </div>
                                     </div>
                                 </div>

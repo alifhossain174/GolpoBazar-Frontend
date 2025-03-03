@@ -6,6 +6,8 @@ use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\PublisherController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\PolicyController;
+use App\Http\Controllers\AudioBooksController;
 
 
 Auth::routes();
@@ -14,6 +16,10 @@ Route::get('/', [FrontendController::class, 'index'])->name('home');
 Route::get('/book/{slug}', [FrontendController::class, 'bookDetails'])->name('BookDetails');
 Route::get('/shop', [FrontendController::class, 'shop'])->name('Shop');
 Route::post('/filter/books', [FrontendController::class, 'filterBooks'])->name('FilterBooks');
+
+
+Route::get('/audio/books', [AudioBooksController::class, 'audioBooks'])->name('AudioBooks');
+Route::post('/filter/audio/books', [AudioBooksController::class, 'filterAudioBooks'])->name('FilterAudioBooks');
 
 
 Route::get('/authors', [AuthorController::class, 'authors'])->name('Authors');
@@ -33,6 +39,13 @@ Route::get('remove/cart/item/{id}', [CartController::class, 'removeCartTtem'])->
 Route::post('update/cart/qty', [CartController::class, 'updateCartQty'])->name('UpdateCartQty');
 Route::get('view/cart', [CartController::class, 'viewCart'])->name('ViewCart');
 Route::get('clear/cart', [CartController::class, 'clearCart'])->name('ClearCart');
+
+
+// policy pages
+Route::get('terms/and/conditions', [PolicyController::class, 'termsAndConditions'])->name('TermsAndConditions');
+Route::get('privacy/policy', [PolicyController::class, 'privacyPolicy'])->name('PrivacyPolicy');
+Route::get('shipping/policy', [PolicyController::class, 'shippingPolicy'])->name('ShippingPolicy');
+Route::get('return/policy', [PolicyController::class, 'returnPolicy'])->name('ReturnPolicy');
 
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

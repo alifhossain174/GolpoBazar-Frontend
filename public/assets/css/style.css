@@ -300,12 +300,12 @@ nav .dropdown ul.dropdown-menu li a.checkout_btn:hover{
     color: #1e1e1e;
     margin-bottom: 16px;
 }
-.author_section .author_card .author_content p.author_bio{
+/* .author_section .author_card .author_content p.author_bio{
     font-size: 16px;
     line-height: 20px;
     color: #1e1e1e;
     margin-bottom: 10px;
-}
+} */
 .author_section .author_card .author_content span.total_books{
     font-size: 16px;
     line-height: 20px;
@@ -776,20 +776,175 @@ nav .dropdown ul.dropdown-menu li a.checkout_btn:hover{
 
 
 /* footer css */
-.footer{
-    margin-top: 80px !important;
-    background-color: white;
-    /* background: #7F7FD5;
-    background: -webkit-linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5);
-    background: linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5); */
-}
-.footer span.copyright_text{
-    font-size: 16px;
-    font-weight: 600;
-    color: #353535;
+.footer {
+    position: relative;
+    background: linear-gradient(to right, #e6f7fa, #d0f0f7, #e6f7fa);
+    padding: 40px 0;
+    overflow: hidden;
 }
 
-.footer a.footer_icon{
-    color: white;
+/* Wave effect backgrounds */
+.footer::before, .footer::after {
+    content: "";
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    border-radius: 45%;
+    background-color: rgba(255, 255, 255, 0.1);
+    z-index: 0;
+}
+
+.footer::before {
+    bottom: -100%;
+    left: -50%;
+    animation: wave 12s linear infinite;
+}
+
+.footer::after {
+    bottom: -100%;
+    right: -50%;
+    animation: wave 16s linear infinite;
+    animation-delay: -3s;
+}
+
+@keyframes wave {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Content container */
+.footer-content {
+    position: relative;
+    z-index: 1;
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+/* Left column */
+.footer-info {
+    flex: 0 0 40%;
+    margin-bottom: 20px;
+}
+
+.footer-info h2 {
+    color: #333;
+    margin-bottom: 15px;
     font-size: 22px;
+    font-weight: 600;
+}
+
+.footer-info p {
+    color: #555;
+    margin-bottom: 15px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.contact-info {
+    margin-top: 20px;
+}
+
+.social-link {
+    display: inline-flex;
+    align-items: center;
+    margin-top: 15px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+a.footer_icon i{
+    font-size: 22px;
+}
+
+/* Middle column - Navigation */
+.footer-nav {
+    flex: 0 0 25%;
+    margin-bottom: 20px;
+}
+
+.footer-nav h4.links{
+    color: #333;
+    margin-bottom: 12px;
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.footer-nav ul {
+    list-style: none;
+    padding-left: 0px;
+}
+
+.footer-nav li {
+    margin-bottom: 8px;
+}
+
+.footer-nav a {
+    color: #333;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+}
+
+.footer-nav a:hover {
+    color: #3A4D8A;
+}
+
+.footer-nav a::before {
+    content: "→";
+    margin-right: 8px;
+}
+
+/* Right column - App downloads */
+.app-downloads {
+    flex: 0 0 25%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.app-button {
+    margin-bottom: 15px;
+    max-width: 170px;
+}
+
+.app-button img {
+    width: 100%;
+    height: auto;
+}
+
+/* Copyright */
+.copyright {
+    width: 100%;
+    text-align: right;
+    margin-top: 20px;
+    color: #333;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .footer-content {
+        flex-direction: column;
+    }
+
+    .footer-info, .footer-nav, .app-downloads {
+        flex: 0 0 100%;
+        margin-bottom: 30px;
+        align-items: flex-start;
+    }
+
+    .app-downloads {
+        align-items: flex-start;
+    }
+
+    .copyright {
+        text-align: left;
+    }
 }

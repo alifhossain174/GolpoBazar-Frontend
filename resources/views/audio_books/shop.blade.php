@@ -12,31 +12,6 @@
 @section('content')
 
 <section>
-    <div class="publisher_author_wise_books">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="publisher_author_box">
-
-                        @if($publisherInfo->logo)
-                            <img class="publisher_author_image lazy" src="{{ url('assets') }}/images/product-load.gif" data-src="{{ url(env('ADMIN_URL') . '/' . $publisherInfo->logo) }}" alt="">
-                        @else
-                            <img class="publisher_author_image lazy" src="{{ url('assets') }}/images/product-load.gif" data-src="{{ url('assets') }}/images/authors/author.png" alt="">
-                        @endif
-
-                        <div class="publisher_author_content w-100">
-                            <h3>{{$publisherInfo->name}}</h3>
-                            <span>Total Books: {{DB::table('products')->where('brand_id', $publisherInfo->id)->where('status', 1)->count()}}</span>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section>
     <div class="book_shop">
         <div class="container">
             <div class="row">
@@ -49,9 +24,10 @@
                             <input type="text" id="search_keyword" class="form-control filter_search" onkeyup="filterProducts()" placeholder="Search by Book Name">
                         </div>
 
-                        @include('publisher_shop.filter_sorting')
-                        @include('publisher_shop.filter_category')
-                        @include('publisher_shop.filter_authors')
+                        @include('audio_books.filter_sorting')
+                        @include('audio_books.filter_category')
+                        @include('audio_books.filter_authors')
+                        @include('audio_books.filter_publishers')
 
                     </div>
                 </div>
@@ -60,7 +36,7 @@
 
                     <div class="row">
                         <div class="col-lg-12" id="product_wrapper">
-                            @include('publisher_shop.products')
+                            @include('audio_books.products')
                         </div>
                     </div>
 
@@ -104,6 +80,7 @@
             // fetching filter values
             let category_array = [];
             let author_array = [];
+            let publisher_array = [];
 
             $("input[name='filter_category[]']").each(function() {
                 if ($(this).is(':checked')) {
@@ -119,9 +96,17 @@
                     }
                 }
             });
+            $("input[name='filter_publisher[]']").each(function() {
+                if ($(this).is(':checked')) {
+                    if (!publisher_array.includes($(this).val())) {
+                        publisher_array.push($(this).val());
+                    }
+                }
+            });
 
             let category_slugs = String(category_array);
             let author_slugs = String(author_array);
+            let publisher_slugs = String(publisher_array);
             var sort_by = Number($("#filter_sort_by").val());
             var search_keyword = $("#search_keyword").val();
 
@@ -134,6 +119,9 @@
             }
             if (author_slugs) {
                 baseUrl.indexOf('?') !== -1 ? baseUrl += '&author=' + author_slugs : baseUrl += '?author=' + author_slugs;
+            }
+            if (publisher_slugs) {
+                baseUrl.indexOf('?') !== -1 ? baseUrl += '&publisher=' + publisher_slugs : baseUrl += '?publisher=' + publisher_slugs;
             }
             if (sort_by && sort_by > 0) {
                 baseUrl.indexOf('?') !== -1 ? baseUrl += '&sort_by=' + sort_by : baseUrl += '?sort_by=' + sort_by;
@@ -148,14 +136,14 @@
             var formData = new FormData();
             formData.append("category", category_slugs);
             formData.append("author", author_slugs);
-            formData.append("publisher", {{ $publisherInfo->id }});
+            formData.append("publisher", publisher_slugs);
             formData.append("sort_by", sort_by);
             formData.append("search_keyword", search_keyword);
             formData.append("path_name", window.location.pathname);
 
             $.ajax({
                 data: formData,
-                url: "{{ url('filter/publisher/books') }}",
+                url: "{{ url('filter/audio/books') }}",
                 type: "POST",
                 cache: false,
                 contentType: false,

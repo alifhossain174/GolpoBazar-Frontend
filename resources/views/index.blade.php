@@ -3,6 +3,7 @@
 @section('content')
 
     @include('homepage_sections.random_pick')
+    @include('homepage_sections.new_books')
 
     @php
         $halfCountCategories = floor(count($categories)/2);

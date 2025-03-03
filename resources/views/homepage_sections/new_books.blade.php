@@ -5,13 +5,7 @@
             <div class="row">
                 <div class="col-8">
                     <h4 class="section_title">
-                        {{$category->name}}
-
-                        @if($category->is_audio == 1)
-                            (Audio)
-                        @else
-                            (Ebook)
-                        @endif
+                        New Books
                     </h4>
                 </div>
                 <div class="col-4 text-end">
@@ -20,11 +14,10 @@
             </div>
 
             @php
-                $categoryWiseBooks = DB::table('products')
+                $newBooks = DB::table('products')
                                         ->leftJoin('users', 'products.author_id', 'users.id')
                                         ->leftJoin('categories', 'products.category_id', 'categories.id')
                                         ->select('products.*', 'users.name as author_name', 'categories.name as category_name')
-                                        ->where('products.category_id', $category->id)
                                         ->where('products.status', 1)
                                         ->orderBy('id', 'desc')
                                         ->skip(0)
@@ -34,7 +27,7 @@
 
             <div class="row custom-columns g-4">
 
-                @foreach ($categoryWiseBooks as $book)
+                @foreach ($newBooks as $book)
                 <div class="col">
                     @include('single_book')
                 </div>
