@@ -10,7 +10,16 @@ class AudioBooksController extends Controller
     public function audioBooks(Request $request){
 
         $categories = DB::table('categories')->where('status', 1)->where('is_audio', 1)->orderBy('serial', 'asc')->get();
-        $bookAuthors = DB::table('users')->where('status', 1)->where('user_type', 2)->inRandomOrder()->get();
+
+        $filterData = DB::table('products')->select('author_id')->where('status', 1)->where('is_audio', 1)->get();
+        $authorIds = $filterData->pluck('author_id')->toArray();
+        $bookAuthors = DB::table('users')
+                        ->where('status', 1)
+                        ->where('user_type', 2)
+                        ->whereIn('id', $authorIds)
+                        ->inRandomOrder()
+                        ->get();
+
         $publishers = DB::table('brands')->where('status', 1)->orderBy('serial', 'asc')->get();
 
         $query = DB::table('products')

@@ -8,6 +8,7 @@ use App\Http\Controllers\PublisherController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\PolicyController;
 use App\Http\Controllers\AudioBooksController;
+use App\Http\Controllers\HomeController;
 
 
 Auth::routes();
@@ -16,6 +17,7 @@ Route::get('/', [FrontendController::class, 'index'])->name('home');
 Route::get('/book/{slug}', [FrontendController::class, 'bookDetails'])->name('BookDetails');
 Route::get('/shop', [FrontendController::class, 'shop'])->name('Shop');
 Route::post('/filter/books', [FrontendController::class, 'filterBooks'])->name('FilterBooks');
+Route::post('product/live/search', [FrontendController::class, 'productLiveSearch'])->name('ProductLiveSearch');
 
 
 Route::get('/audio/books', [AudioBooksController::class, 'audioBooks'])->name('AudioBooks');
@@ -37,7 +39,6 @@ Route::get('add/to/cart/{id}', [CartController::class, 'addToCart'])->name('AddT
 Route::post('add/to/cart/with/qty', [CartController::class, 'addToCartWithQty'])->name('AddToCartWithQty');
 Route::get('remove/cart/item/{id}', [CartController::class, 'removeCartTtem'])->name('RemoveCartTtem');
 Route::post('update/cart/qty', [CartController::class, 'updateCartQty'])->name('UpdateCartQty');
-Route::get('view/cart', [CartController::class, 'viewCart'])->name('ViewCart');
 Route::get('clear/cart', [CartController::class, 'clearCart'])->name('ClearCart');
 
 
@@ -48,4 +49,19 @@ Route::get('shipping/policy', [PolicyController::class, 'shippingPolicy'])->name
 Route::get('return/policy', [PolicyController::class, 'returnPolicy'])->name('ReturnPolicy');
 
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::group(['middleware' => ['auth']], function () {
+
+    Route::get('/user/verification', [HomeController::class, 'userVerification'])->name('UserVerification');
+    Route::post('/user/verify/check', [HomeController::class, 'userVerifyCheck'])->name('UserVerifyCheck');
+    Route::get('/user/verification/resend', [HomeController::class, 'userVerificationResend'])->name('UserVerificationResend');
+
+
+    Route::group(['middleware' => ['CheckUserVerification']], function () {
+
+        Route::get('view/cart', [CartController::class, 'viewCart'])->name('ViewCart');
+        Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+    });
+
+});

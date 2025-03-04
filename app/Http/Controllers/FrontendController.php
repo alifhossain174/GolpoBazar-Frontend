@@ -168,4 +168,12 @@ class FrontendController extends Controller
     }
 
 
+    public function productLiveSearch(Request $request){
+        $query = DB::table('products')->where('name', 'LIKE', '%'.$request->search_keyword.'%')->where('products.status', 1);
+        $searchProducts = $query->where('status', 1)->orderBy('name', 'asc')->skip(0)->limit(5)->get();
+        $searchResults = view('live_search_products', compact('searchProducts'))->render();
+        return response()->json(['searchResults' => $searchResults]);
+    }
+
+
 }

@@ -109,42 +109,27 @@
     @endphp
 
     <main class="form-signin w-100 m-auto" style="max-width: 350px; padding: 1.5rem; background: white; border-radius: 8px;">
-        <form method="POST" action="{{ route('login') }}">
+        <form method="POST" action="{{ url('user/verify/check') }}">
             @csrf
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <img src="{{ url(env('ADMIN_URL') . '/' . $generalInfo->logo) }}" alt="" width="72" height="72" class="mb-4">
                 </div>
             </div>
-            <h1 class="h3 mb-3 fw-normal" style="text-align: center; font-size: 22px; font-weight: 600 !important;">Login to your Account</h1>
+            <h1 class="h3 mb-3 fw-normal" style="text-align: center; font-size: 22px; font-weight: 600 !important;">
+                A 6-digit verification code was sent to <span class="otp-number">"{{ Auth::user()->phone }}"</span> Enter the code to verify.
+            </h1>
 
-            <div class="form-floating">
-                <input type="text" name="username" class="form-control @error('username') is-invalid @enderror" id="username" value="{{ old('username') }}" placeholder="01*********" required>
-                <label for="username">Mobile No</label>
+            <div class="form-floating mb-3">
+                <input type="text" name="code" class="form-control" id="code" value="{{ old('code') }}" placeholder="******" required>
+                <label for="code">Verification Code</label>
             </div>
 
-            @if(count($errors) > 0)
-                @foreach( $errors->all() as $message )
-                <span class="invalid-feedback" role="alert" style="display: block;">
-                    <strong>{{ $message }}</strong>
-                </span>
-                @endforeach
-            @endif
-
-            <div class="form-floating mt-2">
-                <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" id="password" placeholder="Password" required>
-                <label for="password">Password</label>
-            </div>
-
-            <div class="form-check text-start my-3" style="padding-left: 0px;">
-                <a href="{{url('forget/password')}}">Forgotten password?</a>
-            </div>
-
-            <button class="btn btn-primary w-100 py-2" style="background: #20B1B6" type="submit">Sign in</button>
+            <button class="btn btn-primary w-100 py-2" style="background: #20B1B6" type="submit">Verify</button>
         </form>
 
         <p class="mt-4">
-            Don’t have any account? <a href="{{url('register')}}">Register account</a>
+            Didn’t receive Any Code? <a href="{{ url('user/verification/resend') }}">Send again</a>
         </p>
     </main>
 @endsection

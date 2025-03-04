@@ -25,8 +25,12 @@
                 </li>
             </ul>
 
-            <form class="d-flex" role="search">
-                <input class="form-control me-2" type="search" placeholder="Search for books here" aria-label="Search">
+            <form class="d-flex" role="search" style="position: relative">
+                <input class="form-control me-2" id="live_search" type="search" onkeyup="liveSearchProduct()" placeholder="Search for books here" aria-label="Search">
+                {{-- dont remove this html; this is for live search --}}
+                <ul class="live_search_box d-none">
+
+                </ul>
             </form>
 
             <div class="dropdown">

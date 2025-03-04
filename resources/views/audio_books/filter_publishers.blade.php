@@ -6,7 +6,7 @@
         <div class="filter-item">
             <input type="checkbox" id="{{$publisher->slug}}" value="{{$publisher->slug}}" name="filter_publisher[]" @if(isset($publisherSlug) && in_array($publisher->slug, explode(",", $publisherSlug))) checked @endif onchange="filterProducts()">
             <label for="{{$publisher->slug}}">{{$publisher->name}}</label>
-            <span class="count">{{DB::table('products')->where('brand_id', $publisher->id)->where('status', 1)->count()}}</span>
+            <span class="count">{{DB::table('products')->where('brand_id', $publisher->id)->where('is_audio', 1)->where('status', 1)->count()}}</span>
         </div>
         @endforeach
 

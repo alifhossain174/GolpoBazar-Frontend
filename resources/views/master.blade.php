@@ -38,6 +38,66 @@
         button.removeFromCart{
             background-color: #de0000 !important;
         }
+
+        /* live search css start */
+        ul.live_search_box {
+            position: absolute;
+            top: 95%;
+            left: 0px;
+            z-index: 999;
+            background: white;
+            border: 1px solid lightgray;
+            width: 100%;
+            padding: 0px;
+            border-radius: 0px 0px 4px 4px;
+        }
+
+        ul.live_search_box li.live_search_item {
+            list-style: none;
+            border-bottom: 1px solid lightgray;
+        }
+
+        ul.live_search_box li.live_search_item:last-child {
+            border-bottom: none;
+        }
+
+        ul.live_search_box li.live_search_item a.live_search_product_link {
+            display: flex;
+            padding: 10px;
+            transition: all .1s linear;
+        }
+
+        ul.live_search_box li.live_search_item a.live_search_product_link:hover {
+            box-shadow: 1px 1px 5px #cecece inset;
+        }
+
+        ul.live_search_box li.live_search_item a.live_search_product_link img.live_search_product_image {
+            width: 40px;
+            height: 40px;
+            min-width: 40px;
+            min-height: 40px;
+            border: 1px solid lightgray;
+            border-radius: 4px
+        }
+
+        ul.live_search_box li.live_search_item a.live_search_product_link h6.live_search_product_title {
+            margin-left: 8px;
+            margin-top: 2px;
+            margin-bottom: 0px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: 14px;
+        }
+
+        ul.live_search_box li.live_search_item a.live_search_product_link span.live_search_product_price {
+            display: block;
+            margin-top: 2px;
+            color: var(--primary-color);
+            font-size: 13px;
+        }
+
+        /* live search css end */
     </style>
 
     @yield('header_css')
@@ -114,6 +174,39 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+
+
+        function liveSearchProduct() {
+
+            var searchKeyword = $("#live_search").val();
+
+            if (searchKeyword && searchKeyword != '' && searchKeyword != null) {
+                var formData = new FormData();
+                formData.append("search_keyword", searchKeyword);
+
+                $.ajax({
+                    data: formData,
+                    url: "{{ url('product/live/search') }}",
+                    type: "POST",
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function(data) {
+                        $('.live_search_box').removeClass('d-none');
+                        $('.live_search_box').html(data.searchResults);
+                        renderLazyImage();
+                    },
+                    error: function(data) {
+                        toastr.options.positionClass = 'toast-bottom-right';
+                        toastr.options.timeOut = 1000;
+                        toastr.error("Something Went Wrong");
+                    }
+                });
+            } else {
+                $('.live_search_box').addClass('d-none');
+            }
+
+        }
 
         $('body').on('click', '.addToCart', function() {
             var id = $(this).data('id');

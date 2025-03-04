@@ -3,7 +3,7 @@
     <div class="filter-list">
         @foreach ($bookAuthors as $bookAuthor)
             @php
-                $totalBooksOfAuthor = DB::table('products')->where('author_id', $bookAuthor->id)->where('status', 1)->count();
+                $totalBooksOfAuthor = DB::table('products')->where('author_id', $bookAuthor->id)->where('is_audio', 1)->where('status', 1)->count();
             @endphp
             @if($totalBooksOfAuthor > 0)
             <div class="filter-item">

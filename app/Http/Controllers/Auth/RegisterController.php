@@ -50,9 +50,17 @@ class RegisterController extends Controller
     {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'email' => ['required', 'string', 'max:255', 'unique:users'],
+            // 'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password' => ['required', 'string', 'min:8'],
         ]);
+
+        // return Validator::make($data, [
+        //     'name' => ['required', 'string', 'max:255'],
+        //     'email' => ['required', 'string', 'regex:/^(?:\+8801[3-9]\d{8}|01[3-9]\d{8})$/', 'unique:users'],
+        //     'password' => ['required', 'string', 'min:8'],
+        // ]);
+
     }
 
     /**
@@ -63,10 +71,32 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
+        // return User::create([
+        //     'name' => $data['name'],
+        //     'email' => $data['email'],
+        //     'password' => Hash::make($data['password']),
+        // ]);
+
+
+
+        // if (filter_var($data['phone'], FILTER_VALIDATE_EMAIL)) {
+        //     return User::create([
+        //         'name' => $data['name'],
+        //         'email' => $data['phone'],
+        //         'password' => Hash::make($data['password']),
+        //         'user_type' => 3,
+        //         'address' => $data['address'],
+        //         'status' => 0,
+        //     ]);
+        // } else {
+            return User::create([
+                'name' => $data['name'],
+                'phone' => $data['email'],
+                'password' => Hash::make($data['password']),
+                'user_type' => 3,
+                'address' => null,
+                'status' => 0,
+            ]);
+        // }
     }
 }

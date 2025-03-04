@@ -781,6 +781,7 @@ nav .dropdown ul.dropdown-menu li a.checkout_btn:hover{
     background: linear-gradient(to right, #e6f7fa, #d0f0f7, #e6f7fa);
     padding: 40px 0;
     overflow: hidden;
+    margin-top: 60px;
 }
 
 /* Wave effect backgrounds */
