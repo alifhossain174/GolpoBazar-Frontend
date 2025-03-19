@@ -23,6 +23,16 @@
                 <li class="nav-item">
                     <a class="nav-link @if(Request::path() == 'publishers') active @endif" href="{{url('/publishers')}}">Publishers</a>
                 </li>
+
+                @guest
+                <li class="nav-item">
+                    <a class="nav-link @if(Request::path() == 'login') active @endif" href="{{url('/login')}}">Login</a>
+                </li>
+                @else
+                <li class="nav-item">
+                    <a class="nav-link @if(Request::path() == 'home') active @endif" href="{{url('/home')}}">My Account</a>
+                </li>
+                @endguest
             </ul>
 
             <form class="d-flex" role="search" style="position: relative">

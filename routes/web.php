@@ -9,6 +9,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\PolicyController;
 use App\Http\Controllers\AudioBooksController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ForgetPasswordController;
 
 
 Auth::routes();
@@ -48,6 +49,14 @@ Route::get('privacy/policy', [PolicyController::class, 'privacyPolicy'])->name('
 Route::get('shipping/policy', [PolicyController::class, 'shippingPolicy'])->name('ShippingPolicy');
 Route::get('return/policy', [PolicyController::class, 'returnPolicy'])->name('ReturnPolicy');
 
+
+// forget password
+Route::group(['middleware' => ['web']], function () { //wihout web middleware session will not work
+    Route::get('/forget/password', [ForgetPasswordController::class, 'userForgetPassword'])->name('UserForgetPassword');
+    Route::post('/send/forget/password/code', [ForgetPasswordController::class, 'sendForgetPasswordCode'])->name('SendForgetPasswordCode');
+    Route::get('/new/password', [ForgetPasswordController::class, 'newPasswordPage'])->name('NewPasswordPage');
+    Route::post('/change/forgotten/password', [ForgetPasswordController::class, 'changeForgetPassword'])->name('ChangeForgetPassword');
+});
 
 
 Route::group(['middleware' => ['auth']], function () {
