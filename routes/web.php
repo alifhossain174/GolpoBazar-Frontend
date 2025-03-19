@@ -10,6 +10,8 @@ use App\Http\Controllers\PolicyController;
 use App\Http\Controllers\AudioBooksController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ForgetPasswordController;
+use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\PaymentController;
 
 
 Auth::routes();
@@ -59,6 +61,14 @@ Route::group(['middleware' => ['web']], function () { //wihout web middleware se
 });
 
 
+// ssl commerz payment routes
+Route::get('sslcommerz/order', [PaymentController::class, 'order'])->name('payment.order');
+Route::post('sslcommerz/success', [PaymentController::class, 'success'])->name('payment.success');
+Route::post('sslcommerz/failure', [PaymentController::class, 'failure'])->name('sslc.failure');
+Route::post('sslcommerz/cancel', [PaymentController::class, 'cancel'])->name('sslc.cancel');
+Route::post('sslcommerz/ipn', [PaymentController::class, 'ipn'])->name('payment.ipn');
+
+
 Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/user/verification', [HomeController::class, 'userVerification'])->name('UserVerification');
@@ -69,6 +79,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::group(['middleware' => ['CheckUserVerification']], function () {
 
         Route::get('view/cart', [CartController::class, 'viewCart'])->name('ViewCart');
+        Route::post('place/order', [CheckoutController::class, 'placeOrder'])->name('PlaceOrder');
         Route::get('/home', [HomeController::class, 'index'])->name('home');
 
     });
