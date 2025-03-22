@@ -96,6 +96,14 @@ class CheckoutController extends Controller
             return redirect('sslcommerz/order');
         }
 
+        if($request->payment_method == 'bkash'){
+            session([
+                'order_id' => $orderId,
+                'customer_phone' => Auth::user()->phone,
+            ]);
+            return redirect('get/token');
+        }
+
     }
 
     public static function sendOrderSms($phone, $orderInfo){

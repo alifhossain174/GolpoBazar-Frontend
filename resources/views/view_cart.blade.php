@@ -156,7 +156,7 @@
                         <div class="row g-3">
                             <div class="col-12">
                                 <label for="phone" class="form-label">Phone Number</label>
-                                <input type="text" name="phone" value="{{Auth::user()->phone}}" class="form-control" id="phone" placeholder="+8801XXXXXXXXX" required>
+                                <input type="text" name="phone" value="{{Auth::user()->phone}}" class="form-control" id="phone" placeholder="+8801XXXXXXXXX" required readonly>
                             </div>
                         </div>
 

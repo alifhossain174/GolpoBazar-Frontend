@@ -12,6 +12,8 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ForgetPasswordController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\BkashPaymentController;
+use App\Http\Controllers\DashboardController;
 
 
 Auth::routes();
@@ -69,6 +71,14 @@ Route::post('sslcommerz/cancel', [PaymentController::class, 'cancel'])->name('ss
 Route::post('sslcommerz/ipn', [PaymentController::class, 'ipn'])->name('payment.ipn');
 
 
+// route for bkash payment
+Route::get('get/token', [BkashPaymentController::class, 'getToken'])->name('getToken');
+Route::get('create/agreement', [BkashPaymentController::class, 'createAgreement'])->name('createAgreement');
+Route::get('execute/agreement', [BkashPaymentController::class, 'executeAgreement'])->name('executeAgreement');
+Route::get('create/payment', [BkashPaymentController::class, 'createPayment'])->name('createPayment');
+Route::get('execute/payment', [BkashPaymentController::class, 'executePayment'])->name('executePayment');
+
+
 Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/user/verification', [HomeController::class, 'userVerification'])->name('UserVerification');
@@ -81,6 +91,12 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('view/cart', [CartController::class, 'viewCart'])->name('ViewCart');
         Route::post('place/order', [CheckoutController::class, 'placeOrder'])->name('PlaceOrder');
         Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+        Route::get('/user/profile', [DashboardController::class, 'userProfile'])->name('UserProfile');
+        Route::post('/update/profile', [DashboardController::class, 'updateProfile'])->name('UpdateProfile');
+        Route::get('/user/cart', [DashboardController::class, 'userCart'])->name('UserCart');
+        Route::get('/change/password', [DashboardController::class, 'changePassword'])->name('ChangePassword');
+        Route::post('/update/password', [DashboardController::class, 'updatePassword'])->name('UpdatePassword');
 
     });
 
