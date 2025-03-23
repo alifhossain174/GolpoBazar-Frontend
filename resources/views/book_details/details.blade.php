@@ -1,5 +1,29 @@
 @extends('master')
 
+@push('site-seo')
+    @php
+        $generalInfo = DB::table('general_infos')->where('id', 1)->first();
+    @endphp
+
+    <meta name="keywords" content="{{$book ? $book->meta_keywords : ''}}" />
+    <meta name="description" content="{{$book ? $book->meta_description : ''}}" />
+    <meta name="author" content="{{$generalInfo ? $generalInfo->company_name : ''}}">
+    <meta name="copyright" content="{{$generalInfo ? $generalInfo->company_name : ''}}">
+    <meta name="url" content="{{env('APP_URL')."/book/".$book->slug}}">
+
+    {{-- Page Title & Favicon --}}
+    <title>@if($book->meta_title) {{$book->meta_title}} @else {{$book->name}} @endif</title>
+    @if($generalInfo && $generalInfo->fav_icon)<link rel="icon" href="{{env('ADMIN_URL')."/".($generalInfo->fav_icon)}}" type="image/x-icon"/>@endif
+
+    {{-- open graph meta --}}
+    <meta property="og:title" content="@if($book->meta_title) {{$book->meta_title}} @else {{$book->name}} @endif"/>
+    <meta property="og:type" content="{{$book->category_name}}"/>
+    <meta property="og:url" content="{{env('APP_URL')."/product/details/".$book->slug}}"/>
+    <meta property="og:image" content="{{env('ADMIN_URL')."/".$book->image}}"/>
+    <meta property="og:site_name" content="{{$generalInfo ? $generalInfo->company_name : ''}}"/>
+    <meta property="og:description" content="{{$book->short_description}}"/>
+@endpush
+
 @section('content')
 
     <section>
@@ -13,11 +37,11 @@
                     <div class="col-md-4">
                         <div class="book_details_content">
                             <h2 class="book_name">{{$book->name}}</h2>
-                            <a href="authors.html" class="author_name">{{$book->author_name}}</a>
-                            <p class="mb-0">Publisher: <a href="publishers.html">{{$book->publisher}}</a></p>
-                            <p class="mb-3">Publish Date: <a href="publishers.html">{{date("jS M Y", strtotime($book->created_at))}}</a></p>
+                            <a href="{{url('/author/books')}}/{{$book->author_id}}" class="author_name">{{$book->author_name}}</a>
+                            <p class="mb-0">Publisher: <a href="{{url('/publisher/books')}}/{{$book->publisher_slug}}">{{$book->publisher}}</a></p>
+                            <p class="mb-3">Publish Date: <a href="javascript:void(0)">{{date("jS M Y", strtotime($book->created_at))}}</a></p>
 
-                            <p class="mb-0">Category: <a href="books.html">{{$book->category_name}}</a></p>
+                            <p class="mb-0">Category: <a href="javascript:void(0)">{{$book->category_name}}</a></p>
                             <p class="mb-0">Language: {{$book->language}}</p>
                             <p class="mb-0">Status: @if($book->is_premium == 1) Premium @else Free @endif</p>
 

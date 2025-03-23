@@ -29,7 +29,7 @@ class FrontendController extends Controller
                 ->leftJoin('users', 'products.author_id', 'users.id')
                 ->leftJoin('categories', 'products.category_id', 'categories.id')
                 ->leftJoin('brands', 'products.brand_id', 'brands.id')
-                ->select('products.*', 'users.name as author_name', 'categories.name as category_name', 'brands.name as publisher')
+                ->select('products.*', 'users.id as author_id', 'users.name as author_name', 'categories.name as category_name', 'brands.name as publisher', 'brands.slug as publisher_slug')
                 ->where('products.slug', $slug)
                 ->first();
 

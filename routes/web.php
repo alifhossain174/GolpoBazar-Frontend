@@ -85,9 +85,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/user/verify/check', [HomeController::class, 'userVerifyCheck'])->name('UserVerifyCheck');
     Route::get('/user/verification/resend', [HomeController::class, 'userVerificationResend'])->name('UserVerificationResend');
 
-
     Route::group(['middleware' => ['CheckUserVerification']], function () {
 
+
+        Route::get('/order/{order_slug}', [DashboardController::class, 'orderPreview'])->name('OrderPreview');
         Route::get('view/cart', [CartController::class, 'viewCart'])->name('ViewCart');
         Route::post('place/order', [CheckoutController::class, 'placeOrder'])->name('PlaceOrder');
         Route::get('/home', [HomeController::class, 'index'])->name('home');
@@ -97,6 +98,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/user/cart', [DashboardController::class, 'userCart'])->name('UserCart');
         Route::get('/change/password', [DashboardController::class, 'changePassword'])->name('ChangePassword');
         Route::post('/update/password', [DashboardController::class, 'updatePassword'])->name('UpdatePassword');
+        Route::get('/user/orders', [DashboardController::class, 'userOrders'])->name('UserOrders');
+        Route::get('/order/details/{order_no}', [DashboardController::class, 'orderDetails'])->name('OrderDetails');
 
     });
 

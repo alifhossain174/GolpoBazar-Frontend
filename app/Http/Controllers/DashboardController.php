@@ -5,10 +5,16 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class DashboardController extends Controller
 {
+    public function orderPreview($slug){
+        $orderInfo = DB::table('orders')->where('slug', $slug)->first();
+        return view('order_success', compact('orderInfo'));
+    }
+
     public function userProfile(){
         return view('dashboard.home');
     }
@@ -64,5 +70,25 @@ class DashboardController extends Controller
 
         Toastr::success('Password Changed Successfully', 'Success');
         return back();
+    }
+
+    public function userOrders(){
+        return view('dashboard.home');
+    }
+
+    public function orderDetails($slug){
+
+        $orderInfo = DB::table('orders')->where('order_no', $slug)->first();
+
+        $orderDetails = DB::table('order_details')
+                            ->leftJoin('products', 'order_details.product_id', 'products.id')
+                            ->leftJoin('users', 'products.author_id', 'users.id')
+                            ->select('order_details.*', 'products.name', 'products.image', 'products.slug as book_slug', 'users.name as author_name')
+                            ->where('order_id', $orderInfo->id)
+                            ->get();
+
+        $orderPayment = DB::table('order_payments')->where('order_id', $orderInfo->id)->first();
+
+        return view('dashboard.order_details', compact('orderInfo', 'orderDetails', 'orderPayment'));
     }
 }

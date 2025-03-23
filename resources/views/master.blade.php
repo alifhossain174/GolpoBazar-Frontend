@@ -17,17 +17,6 @@
 
     @stack('site-seo')
 
-    <title>
-        @if ($generalInfo && $generalInfo->tab_title)
-            {{ $generalInfo->tab_title }}
-        @else
-            {{ $generalInfo->company_name }}
-        @endif
-    </title>
-    @if ($generalInfo && $generalInfo->fav_icon)
-        <link rel="icon" href="{{ env('ADMIN_URL') . '/' . $generalInfo->fav_icon }}" type="image/x-icon" />
-    @endif
-
     <link rel="stylesheet" href="{{url('assets')}}/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="{{ url('assets') }}/css/toastr.min.css">

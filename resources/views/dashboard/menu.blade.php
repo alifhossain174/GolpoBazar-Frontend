@@ -16,14 +16,14 @@
         <a onclick="changeURL('/home')" class="nav-link @if(Request::path() == 'home') show active @endif" id="dashboard-tab" data-bs-toggle="pill" href="#dashboard">
             <i class="bi bi-speedometer2 me-2"></i> Dashboard
         </a>
-        <a class="nav-link" id="orders-tab" data-bs-toggle="pill" href="#orders">
-            <i class="bi bi-bag me-2"></i> Orders
+        <a onclick="changeURL('/user/orders')" class="nav-link @if(Request::path() == 'user/orders') show active @endif" id="orders-tab" data-bs-toggle="pill" href="#orders">
+            <i class="bi bi-bag me-2"></i> My Orders
         </a>
         <a onclick="changeURL('/user/cart')" class="nav-link @if(Request::path() == 'user/cart') active @endif" id="cart-tab" data-bs-toggle="pill" href="#cart">
-            <i class="bi bi-cart me-2"></i> Cart
+            <i class="bi bi-cart me-2"></i> Cart Items
         </a>
         <a onclick="changeURL('/user/profile')" class="nav-link @if(Request::path() == 'user/profile') active @endif" id="profile-tab" data-bs-toggle="pill" href="#profile">
-            <i class="bi bi-person me-2"></i> Profile
+            <i class="bi bi-person me-2"></i> My Profile
         </a>
         <a onclick="changeURL('/change/password')" class="nav-link @if(Request::path() == 'change/password') active @endif" id="password-tab" data-bs-toggle="pill" href="#password">
             <i class="bi bi-key me-2"></i> Change Password
