@@ -160,8 +160,8 @@
             <button class="btn btn-primary w-100 py-2" style="background: #20B1B6" type="submit">Sign in</button>
         </form>
 
-        <p class="mt-4">
+        {{-- <p class="mt-4">
             Don’t have any account? <a href="{{url('register')}}">Register account</a>
-        </p>
+        </p> --}}
     </main>
 @endsection
