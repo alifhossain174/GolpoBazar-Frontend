@@ -76,6 +76,7 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @if(count($recentOrders) > 0)
                     @foreach ($recentOrders as $index => $recentOrder)
                     <tr>
                         <td class="text-center">{{++$index}}</td>
@@ -97,6 +98,11 @@
                         </td>
                     </tr>
                     @endforeach
+                    @else
+                    <tr>
+                        <td colspan="7" class="text-center">No orders found</td>
+                    </tr>
+                    @endif
                 </tbody>
             </table>
         </div>

@@ -65,6 +65,10 @@
         padding-left: 0px !important;
         padding-right: 6px !important;
     }
+    .book_shop .book .overlay .book_actions{
+        padding-left: 0px !important;
+        padding-right: 6px !important;
+    }
 
     .books_category .book .book_rating i{
         font-size: 12px;

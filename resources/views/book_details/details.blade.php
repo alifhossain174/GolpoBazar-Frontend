@@ -41,9 +41,14 @@
                             <p class="mb-0">Publisher: <a href="{{url('/publisher/books')}}/{{$book->publisher_slug}}">{{$book->publisher}}</a></p>
                             <p class="mb-3">Publish Date: <a href="javascript:void(0)">{{date("jS M Y", strtotime($book->created_at))}}</a></p>
 
-                            <p class="mb-0">Category: <a href="javascript:void(0)">{{$book->category_name}}</a></p>
+                            @if($book->is_audio == 1)
+                            <p class="mb-0">Category: <a href="{{env('APP_URL')}}/audio/books?category={{$book->category_slug}}">{{$book->category_name}}</a></p>
+                            @else
+                            <p class="mb-0">Category: <a href="{{env('APP_URL')}}/shop?category={{$book->category_slug}}">{{$book->category_name}}</a></p>
+                            @endif
+
                             <p class="mb-0">Language: {{$book->language}}</p>
-                            <p class="mb-0">Status: @if($book->is_premium == 1) Premium @else Free @endif</p>
+                            <p class="mb-0">Type: @if($book->is_audio == 1) Audio Book @else Ebook @endif</p>
 
                             @php
                                 $productReviews = DB::table('product_reviews')
@@ -84,10 +89,56 @@
                                 @endif
                             </h5>
 
+                            @php
+                                // $bookURL = env('APP_URL')."/book/".$book->slug;
+                                $bookURL = "https://golpobazar.com/book/".$book->slug;
+                                $packageName = "app.gstl.golpobazar";
+                                $playStoreURL = "https://play.google.com/store/apps/details?id=" . $packageName;
+                                $encodedFallbackURL = urlencode($playStoreURL);
+                            @endphp
+
+                            <style>
+                                a.readBook{
+                                    border: 2px solid #20B1B6;
+                                    padding: 4px 16px;
+                                    font-size: 14px;
+                                    font-weight: 600;
+                                    line-height: 26px;
+                                    color: #20B1B6;
+                                    text-shadow: none;
+                                    transition: all 0.3s linear;
+                                    box-shadow: inset 2px 2px 5px #c6c6c6;
+                                }
+
+                                a.readBook:hover{
+                                    border: 2px solid #20B1B6;
+                                    text-shadow: none;
+                                    color: #20B1B6;
+                                    text-shadow: none;
+                                    box-shadow: none;
+                                }
+                            </style>
+
+                            <a class="btn btn-sm rounded readBook" href="intent://{{ $bookURL }}#Intent;scheme=https;package={{ $packageName }};S.browser_fallback_url={{ $encodedFallbackURL }};end;"
+                            onclick="return handleAppLink(event, '{{ $bookURL }}', '{{ $playStoreURL }}');">
+                            <i class="fas fa-book-open"></i> &nbsp;বইটি পড়ুন
+                            </a>
+
+                            <script>
+                                function handleAppLink(event, bookURL, fallbackURL) {
+                                    if (!navigator.userAgent.match(/Android/i)) {
+                                        // If not on Android, open the web link instead
+                                        event.preventDefault();
+                                        // window.location.href = bookURL;
+                                        window.location.href = 'https://play.google.com/store/apps/details?id=app.gstl.golpobazar&hl=en';
+                                    }
+                                }
+                            </script>
+
                             @if (isset(session()->get('cart')[$book->id]))
-                                <button data-id="{{$book->id}}" class="cart-{{$book->id}} removeFromCart btn add_to_cart"><i class="fas fa-times"></i> Remove from Cart</button>
+                            <button data-id="{{$book->id}}" class="cart-{{$book->id}} removeFromCart btn add_to_cart"><i class="fas fa-times"></i> Remove from Cart</button>
                             @else
-                                <button data-id="{{$book->id}}" class="cart-{{$book->id}} addToCart btn add_to_cart"><i class="fas fa-cart-plus"></i> Add to Cart</button>
+                            <button data-id="{{$book->id}}" class="cart-{{$book->id}} addToCart btn add_to_cart"><i class="fas fa-cart-plus"></i> Add to Cart</button>
                             @endif
 
                             <button onclick="socialShare('{{$book->slug}}')" class="btn social-share-btn"><i class="fas fa-share-alt"></i></button>
@@ -115,3 +166,5 @@
     @include('book_details.related_books')
 
 @endsection
+
+

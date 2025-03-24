@@ -237,6 +237,14 @@ nav .dropdown ul.dropdown-menu li a.checkout_btn:hover{
         font-size: 0.8rem;
         padding: 4px 8px;
     }
+    .book_shop .book .overlay .add-to-cart-btn {
+        font-size: 0.8rem !important;
+        padding: 4px 8px;
+    }
+    .book_shop .book .overlay .social-share-btn {
+        font-size: 0.8rem !important;
+        padding: 4px 8px;
+    }
 }
 
 .books_category .book h5.book_title{
@@ -512,8 +520,8 @@ nav .dropdown ul.dropdown-menu li a.checkout_btn:hover{
 
 @media (max-width: 576px) { /* Adjust for mobile screens */
     .book_shop .custom-columns-shop > div {
-        flex: 0 0 100%; /* Each column takes full row width */
-        max-width: 100%;
+        flex: 0 0 50%; /* Each column takes full row width */
+        max-width: 50%;
     }
 }
 .book_shop .book img.book_image{
@@ -572,15 +580,7 @@ nav .dropdown ul.dropdown-menu li a.checkout_btn:hover{
 
 @media (max-width: 576px) {
     .book_shop .book .overlay .book_price {
-        font-size: 16px;
-    }
-    .book_shop .book .overlay .add-to-cart-btn {
-        font-size: 0.9rem;
-        padding: 6px 10px;
-    }
-    .book_shop .book .overlay .social-share-btn {
-        font-size: 0.9rem;
-        padding: 6px 10px;
+        font-size: 20px;
     }
 }
 

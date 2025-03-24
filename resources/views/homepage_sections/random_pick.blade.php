@@ -56,6 +56,52 @@
                             @endif
                         </h5>
 
+                        @php
+                            // $bookURL = env('APP_URL')."/book/".$book->slug;
+                            $bookURL = "https://golpobazar.com/book/".$randomBook->slug;
+                            $packageName = "app.gstl.golpobazar";
+                            $playStoreURL = "https://play.google.com/store/apps/details?id=" . $packageName;
+                            $encodedFallbackURL = urlencode($playStoreURL);
+                        @endphp
+
+                        <style>
+                            a.readBook{
+                                border: 2px solid #20B1B6;
+                                padding: 4px 16px;
+                                font-size: 14px;
+                                font-weight: 600;
+                                line-height: 26px;
+                                color: #20B1B6;
+                                text-shadow: none;
+                                transition: all 0.3s linear;
+                                box-shadow: inset 2px 2px 5px #c6c6c6;
+                            }
+
+                            a.readBook:hover{
+                                border: 2px solid #20B1B6;
+                                text-shadow: none;
+                                color: #20B1B6;
+                                text-shadow: none;
+                                box-shadow: none;
+                            }
+                        </style>
+
+                        <a class="btn btn-sm rounded readBook" href="intent://{{ $bookURL }}#Intent;scheme=https;package={{ $packageName }};S.browser_fallback_url={{ $encodedFallbackURL }};end;"
+                        onclick="return handleAppLink(event, '{{ $bookURL }}', '{{ $playStoreURL }}');">
+                        <i class="fas fa-book-open"></i> &nbsp;বইটি পড়ুন
+                        </a>
+
+                        <script>
+                            function handleAppLink(event, bookURL, fallbackURL) {
+                                if (!navigator.userAgent.match(/Android/i)) {
+                                    // If not on Android, open the web link instead
+                                    event.preventDefault();
+                                    // window.location.href = bookURL;
+                                    window.location.href = 'https://play.google.com/store/apps/details?id=app.gstl.golpobazar&hl=en';
+                                }
+                            }
+                        </script>
+
                         @if (isset(session()->get('cart')[$randomBook->id]))
                             <button data-id="{{$randomBook->id}}" class="cart-{{$randomBook->id}} removeFromCart btn add_to_cart"><i class="fas fa-times"></i> Remove from Cart</button>
                         @else

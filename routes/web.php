@@ -16,7 +16,13 @@ use App\Http\Controllers\BkashPaymentController;
 use App\Http\Controllers\DashboardController;
 
 
-Auth::routes();
+// Auth::routes();
+Auth::routes([
+    'login' => false,
+    'register' => false, // Registration Routes...
+    'reset' => false, // Password Reset Routes...
+    'verify' => false, // Email Verification Routes...
+]);
 
 Route::get('/', [FrontendController::class, 'index'])->name('home');
 Route::get('/book/{slug}', [FrontendController::class, 'bookDetails'])->name('BookDetails');
@@ -78,28 +84,28 @@ Route::get('execute/agreement', [BkashPaymentController::class, 'executeAgreemen
 Route::get('create/payment', [BkashPaymentController::class, 'createPayment'])->name('createPayment');
 Route::get('execute/payment', [BkashPaymentController::class, 'executePayment'])->name('executePayment');
 
+// place order related routes
+Route::get('/order/{order_slug}', [DashboardController::class, 'orderPreview'])->name('OrderPreview');
+Route::get('view/cart', [CartController::class, 'viewCart'])->name('ViewCart');
+Route::post('place/order', [CheckoutController::class, 'placeOrder'])->name('PlaceOrder');
+
 
 Route::group(['middleware' => ['auth']], function () {
 
-    Route::get('/user/verification', [HomeController::class, 'userVerification'])->name('UserVerification');
-    Route::post('/user/verify/check', [HomeController::class, 'userVerifyCheck'])->name('UserVerifyCheck');
-    Route::get('/user/verification/resend', [HomeController::class, 'userVerificationResend'])->name('UserVerificationResend');
+    // Route::get('/user/verification', [HomeController::class, 'userVerification'])->name('UserVerification');
+    // Route::post('/user/verify/check', [HomeController::class, 'userVerifyCheck'])->name('UserVerifyCheck');
+    // Route::get('/user/verification/resend', [HomeController::class, 'userVerificationResend'])->name('UserVerificationResend');
 
     Route::group(['middleware' => ['CheckUserVerification']], function () {
 
-
-        Route::get('/order/{order_slug}', [DashboardController::class, 'orderPreview'])->name('OrderPreview');
-        Route::get('view/cart', [CartController::class, 'viewCart'])->name('ViewCart');
-        Route::post('place/order', [CheckoutController::class, 'placeOrder'])->name('PlaceOrder');
-        Route::get('/home', [HomeController::class, 'index'])->name('home');
-
-        Route::get('/user/profile', [DashboardController::class, 'userProfile'])->name('UserProfile');
-        Route::post('/update/profile', [DashboardController::class, 'updateProfile'])->name('UpdateProfile');
-        Route::get('/user/cart', [DashboardController::class, 'userCart'])->name('UserCart');
-        Route::get('/change/password', [DashboardController::class, 'changePassword'])->name('ChangePassword');
-        Route::post('/update/password', [DashboardController::class, 'updatePassword'])->name('UpdatePassword');
-        Route::get('/user/orders', [DashboardController::class, 'userOrders'])->name('UserOrders');
-        Route::get('/order/details/{order_no}', [DashboardController::class, 'orderDetails'])->name('OrderDetails');
+        // Route::get('/home', [HomeController::class, 'index'])->name('home');
+        // Route::get('/user/profile', [DashboardController::class, 'userProfile'])->name('UserProfile');
+        // Route::post('/update/profile', [DashboardController::class, 'updateProfile'])->name('UpdateProfile');
+        // Route::get('/user/cart', [DashboardController::class, 'userCart'])->name('UserCart');
+        // Route::get('/change/password', [DashboardController::class, 'changePassword'])->name('ChangePassword');
+        // Route::post('/update/password', [DashboardController::class, 'updatePassword'])->name('UpdatePassword');
+        // Route::get('/user/orders', [DashboardController::class, 'userOrders'])->name('UserOrders');
+        // Route::get('/order/details/{order_no}', [DashboardController::class, 'orderDetails'])->name('OrderDetails');
 
     });
 

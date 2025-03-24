@@ -172,7 +172,7 @@
                         <div class="row g-3">
                             <div class="col-12">
                                 <label for="phone" class="form-label">Phone Number</label>
-                                <input type="text" name="phone" value="{{Auth::user()->phone}}" class="form-control" id="phone" placeholder="+8801XXXXXXXXX" required readonly>
+                                <input type="text" name="phone" value="" class="form-control" id="phone" placeholder="+8801XXXXXXXXX" required readonly>
                             </div>
                         </div>
 
@@ -215,7 +215,7 @@
                         </div>
 
                         <hr class="my-4">
-                        <button class="w-100 btn btn-lg text-white" style="background-color: #20B1B6;" type="submit">Pay Now</button>
+                        <button class="w-100 btn btn-lg text-white" style="background-color: #20B1B6;" type="submit"><i class="fas fa-money-bill-alt"></i> Pay Now</button>
                     </form>
                 </div>
             </div>

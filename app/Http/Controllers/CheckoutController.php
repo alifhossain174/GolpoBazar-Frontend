@@ -19,6 +19,12 @@ class CheckoutController extends Controller
             return redirect('/');
         }
 
+        $userInfo = DB::table('users')->where('phone', $request->phone)->first();
+        if(!$userInfo){
+            Toastr::error('No User Account Found', 'Phone No not found');
+            return redirect()->back();
+        }
+
         // common tasks to do for every order (not dependent on any payment gateway)
         date_default_timezone_set("Asia/Dhaka");
         $total = 0;
@@ -36,7 +42,7 @@ class CheckoutController extends Controller
 
         $orderId = DB::table('orders')->insertGetId([
             'order_no' => time().rand(100,999),
-            'user_id' => auth()->user()->id,
+            'user_id' => $userInfo->id,
             'order_date' => date("Y-m-d H:i:s"),
             'estimated_dd' => date('Y-m-d', strtotime("+7 day", strtotime(date("Y-m-d")))),
             'payment_method' => $request->payment_method == 'sslcommerz' ? 4 : 2,
@@ -90,8 +96,8 @@ class CheckoutController extends Controller
         if ($request->payment_method == 'sslcommerz') {
             session([
                 'order_id' => $orderId,
-                'customer_name' => Auth::user()->name,
-                'customer_email' => Auth::user()->phone,
+                'customer_name' => $userInfo->name,
+                'customer_email' => $userInfo->phone,
             ]);
             return redirect('sslcommerz/order');
         }
@@ -99,7 +105,7 @@ class CheckoutController extends Controller
         if($request->payment_method == 'bkash'){
             session([
                 'order_id' => $orderId,
-                'customer_phone' => Auth::user()->phone,
+                'customer_phone' => $userInfo->phone,
             ]);
             return redirect('get/token');
         }

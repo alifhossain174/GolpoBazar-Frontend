@@ -23,7 +23,8 @@
         <img src="https://cdn-icons-png.flaticon.com/512/190/190411.png" alt="Success" width="120" class="mx-auto">
         <h3 class="mt-3 text-success">Order Placed Successfully!</h3>
         <p class="text-muted">Your order number is <strong>#{{$orderInfo->order_no}}</strong></p>
-        <a href="{{url('order/details')}}/{{$orderInfo->order_no}}" class="btn btn-primary mt-3">View Order Details</a>
+        <p class="text-muted">Purchased Books can be read from the mobile App of Golpobazar</p>
+        {{-- <a href="{{url('order/details')}}/{{$orderInfo->order_no}}" class="btn btn-primary mt-3">View Order Details</a> --}}
     </div>
 </div>
 

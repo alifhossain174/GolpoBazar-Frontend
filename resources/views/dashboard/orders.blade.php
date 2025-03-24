@@ -26,6 +26,7 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @if(count($userOrders) > 0)
                     @foreach ($userOrders as $userOrderIndex => $userOrder)
                     <tr>
                         <td class="text-center">{{++$userOrderIndex}}</td>
@@ -47,6 +48,11 @@
                         </td>
                     </tr>
                     @endforeach
+                    @else
+                    <tr>
+                        <td colspan="7" class="text-center">No orders found</td>
+                    </tr>
+                    @endif
                 </tbody>
             </table>
 

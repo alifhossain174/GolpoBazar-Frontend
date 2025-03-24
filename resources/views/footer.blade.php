@@ -55,7 +55,7 @@
                 <li><a href="{{ url('privacy/policy') }}">Privacy Policy</a></li>
                 <li><a href="{{ url('shipping/policy') }}">Shipping Policy</a></li>
                 <li><a href="{{ url('return/policy') }}">Return Policy</a></li>
-                <li><a href="{{url('/login')}}">My Account</a></li>
+                {{-- <li><a href="{{url('/login')}}">My Account</a></li> --}}
             </ul>
         </div>
 
