@@ -25,12 +25,6 @@
         .publishers .publisher_box .publisher_content h5.publisher_name{
             font-size: 16px;
         }
-
-        .footer {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-        }
     </style>
 @endsection
 
@@ -43,7 +37,7 @@
                     <h4 class="section_title">Book Publishers</h4>
                 </div>
                 <div class="col-lg-4 text-end">
-                    <input type="search" class="form-control" placeholder="Search for Publishers here">
+                    {{-- <input type="search" class="form-control" placeholder="Search for Publishers here"> --}}
                 </div>
             </div>
 

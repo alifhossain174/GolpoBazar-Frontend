@@ -8,7 +8,16 @@
             </div>
 
             <div class="row">
-                @foreach ($productReviews as $productReview)
+                @php
+                    $productReviewsToShow = DB::table('product_reviews')
+                                        ->leftJoin('users', 'product_reviews.user_id', 'users.id')
+                                        ->select('product_reviews.*', 'users.name as user_name', 'users.image as user_image')
+                                        ->where('product_reviews.product_id', $book->id)
+                                        ->orderBy('product_reviews.id', 'desc')
+                                        ->paginate(10);
+                @endphp
+
+                @foreach ($productReviewsToShow as $productReview)
                 <div class="col-lg-12">
                     <div class="review_box">
 
@@ -43,11 +52,9 @@
                 @endforeach
             </div>
 
-            {{-- <div class="row">
-                <div class="col-12">
-                    <button class="btn load_more_reviews">Load More Reviews</button>
-                </div>
-            </div> --}}
+            <div class="pagination">
+                {{ $productReviewsToShow->links() }}
+            </div>
 
         </div>
     </div>

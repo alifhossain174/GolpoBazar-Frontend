@@ -24,6 +24,21 @@
     <meta property="og:description" content="{{$book->short_description}}"/>
 @endpush
 
+@section('header_css')
+    <style>
+        .pagination {
+            justify-content: left;
+        }
+        .pagination nav{
+            box-shadow: none !important;
+            background: transparent !important;
+        }
+        .publishers .publisher_box .publisher_content h5.publisher_name{
+            font-size: 16px;
+        }
+    </style>
+@endsection
+
 @section('content')
 
     <section>
@@ -42,9 +57,9 @@
                             <p class="mb-3">Publish Date: <a href="javascript:void(0)">{{date("jS M Y", strtotime($book->created_at))}}</a></p>
 
                             @if($book->is_audio == 1)
-                            <p class="mb-0">Category: <a href="{{env('APP_URL')}}/audio/books?category={{$book->category_slug}}">{{$book->category_name}}</a></p>
+                            <p class="mb-0">Category: <a href="{{url('audio/books')}}?category={{$book->category_slug}}">{{$book->category_name}}</a></p>
                             @else
-                            <p class="mb-0">Category: <a href="{{env('APP_URL')}}/shop?category={{$book->category_slug}}">{{$book->category_name}}</a></p>
+                            <p class="mb-0">Category: <a href="{{url('shop')}}?category={{$book->category_slug}}">{{$book->category_name}}</a></p>
                             @endif
 
                             <p class="mb-0">Language: {{$book->language}}</p>

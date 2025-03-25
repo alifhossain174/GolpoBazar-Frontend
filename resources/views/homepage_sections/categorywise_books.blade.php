@@ -15,7 +15,11 @@
                     </h4>
                 </div>
                 <div class="col-4 text-end">
-                    <a href="{{url('/shop')}}" class="book_category_visit">See More</a>
+                    @if($category->is_audio == 1)
+                    <a href="{{url('audio/books')}}?category={{$category->slug}}" class="book_category_visit">See More</a>
+                    @else
+                    <a href="{{url('shop')}}?category={{$category->slug}}" class="book_category_visit">See More</a>
+                    @endif
                 </div>
             </div>
 

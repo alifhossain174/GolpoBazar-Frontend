@@ -39,7 +39,7 @@
                         <h4 class="section_title">Book Authors</h4>
                     </div>
                     <div class="col-lg-4 text-end">
-                        <input type="search" class="form-control" placeholder="Search for Authors here">
+                        {{-- <input type="search" class="form-control" placeholder="Search for Authors here"> --}}
                     </div>
                 </div>
 
