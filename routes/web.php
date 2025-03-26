@@ -87,6 +87,7 @@ Route::get('execute/payment', [BkashPaymentController::class, 'executePayment'])
 // place order related routes
 Route::get('/order/{order_slug}', [DashboardController::class, 'orderPreview'])->name('OrderPreview');
 Route::get('view/cart', [CartController::class, 'viewCart'])->name('ViewCart');
+Route::post('apply/coupon', [CheckoutController::class, 'applyCoupon'])->name('ApplyCoupon');
 Route::post('place/order', [CheckoutController::class, 'placeOrder'])->name('PlaceOrder');
 
 

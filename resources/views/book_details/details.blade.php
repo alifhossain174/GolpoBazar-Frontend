@@ -15,13 +15,26 @@
     <title>@if($book->meta_title) {{$book->meta_title}} @else {{$book->name}} @endif</title>
     @if($generalInfo && $generalInfo->fav_icon)<link rel="icon" href="{{env('ADMIN_URL')."/".($generalInfo->fav_icon)}}" type="image/x-icon"/>@endif
 
+
+    @php
+        $bookFullDesForOg = strip_tags($book->description);
+        $bookShortOgDesc = (mb_strlen($bookFullDesForOg, 'UTF-8') > 100) ? mb_substr($bookFullDesForOg, 0, 100, 'UTF-8') . "..." : $bookFullDesForOg;
+    @endphp
+
     {{-- open graph meta --}}
-    <meta property="og:title" content="@if($book->meta_title) {{$book->meta_title}} @else {{$book->name}} @endif"/>
-    <meta property="og:type" content="{{$book->category_name}}"/>
-    <meta property="og:url" content="{{env('APP_URL')."/product/details/".$book->slug}}"/>
+    <meta property="og:title" content="@if($book->meta_title){{$book->meta_title}}@else{{$book->name}}@endif"/>
+    <meta property="og:type" content="book"/>
+    <meta property="og:url" content="{{env('APP_URL')."/book/".$book->slug}}"/>
     <meta property="og:image" content="{{env('ADMIN_URL')."/".$book->image}}"/>
-    <meta property="og:site_name" content="{{$generalInfo ? $generalInfo->company_name : ''}}"/>
-    <meta property="og:description" content="{{$book->short_description}}"/>
+    <meta property="og:image:secure_url" content="{{env('ADMIN_URL')."/".$book->image}}"/>
+    <meta property="og:image:type" content="image/webp"/>
+    <meta property="og:image:width" content="1200"/>
+    <meta property="og:image:height" content="630"/>
+    <meta property="og:site_name" content="{{$generalInfo ? $generalInfo->company_name : env('APP_NAME')}}"/>
+    <meta property="og:description" content="{{$bookShortOgDesc}}"/>
+    <meta property="og:locale" content="bn_BD"/>
+    <meta property="og:locale:alternate" content="en_US"/>
+
 @endpush
 
 @section('header_css')
@@ -52,9 +65,9 @@
                     <div class="col-md-4">
                         <div class="book_details_content">
                             <h2 class="book_name">{{$book->name}}</h2>
-                            <a href="{{url('/author/books')}}/{{$book->author_id}}" class="author_name">{{$book->author_name}}</a>
-                            <p class="mb-0">Publisher: <a href="{{url('/publisher/books')}}/{{$book->publisher_slug}}">{{$book->publisher}}</a></p>
-                            <p class="mb-3">Publish Date: <a href="javascript:void(0)">{{date("jS M Y", strtotime($book->created_at))}}</a></p>
+                            <a href="{{url('/author/books')}}/{{$book->author_id}}" class="author_name d-inline-block">{{$book->author_name}}</a>
+                            <p class="mb-0 mt-2">Publisher: <a href="{{url('/publisher/books')}}/{{$book->publisher_slug}}">{{$book->publisher}}</a></p>
+                            <p class="mb-0">Publish Date: <span style="font-weight: 500">{{date("jS M Y", strtotime($book->created_at))}}</span></p>
 
                             @if($book->is_audio == 1)
                             <p class="mb-0">Category: <a href="{{url('audio/books')}}?category={{$book->category_slug}}">{{$book->category_name}}</a></p>
@@ -62,7 +75,7 @@
                             <p class="mb-0">Category: <a href="{{url('shop')}}?category={{$book->category_slug}}">{{$book->category_name}}</a></p>
                             @endif
 
-                            <p class="mb-0">Language: {{$book->language}}</p>
+                            <p class="mb-0">Language: <span style="font-weight: 500">{{$book->language}}</span></p>
                             <p class="mb-0">Type: @if($book->is_audio == 1) Audio Book @else Ebook @endif</p>
 
                             @php
@@ -76,7 +89,7 @@
                                 $productRating = DB::table('product_reviews')->where('product_id', $book->id)->sum('rating');
                             @endphp
 
-                            <p class="mb-5">
+                            <p class="mb-3">
                                 Rating ({{count($productReviews)}}):
                                 @if(count($productReviews) > 0)
                                     @for ($i=1;$i<=round($productRating/count($productReviews));$i++)
@@ -134,10 +147,11 @@
                                 }
                             </style>
 
-                            <a class="btn btn-sm rounded readBook" href="intent://{{ $bookURL }}#Intent;scheme=https;package={{ $packageName }};S.browser_fallback_url={{ $encodedFallbackURL }};end;"
+                            <a class="btn btn-sm rounded readBook d-inline-block mb-2" href="intent://{{ $bookURL }}#Intent;scheme=https;package={{ $packageName }};S.browser_fallback_url={{ $encodedFallbackURL }};end;"
                             onclick="return handleAppLink(event, '{{ $bookURL }}', '{{ $playStoreURL }}');">
                             <i class="fas fa-book-open"></i> &nbsp;বইটি পড়ুন
                             </a>
+                            <br>
 
                             <script>
                                 function handleAppLink(event, bookURL, fallbackURL) {
@@ -181,5 +195,3 @@
     @include('book_details.related_books')
 
 @endsection
-
-

@@ -95,7 +95,8 @@ nav .dropdown ul.dropdown-menu li a.checkout_btn:hover{
 .todays_choice .todays_choice_content p{
     font-size: 16px;
     color: #333;
-    margin-top: 20px;
+    margin-top: 14px;
+    margin-bottom: 14px;
 }
 .todays_choice .todays_choice_content h6.categories{
     font-weight: 600;
@@ -625,12 +626,12 @@ nav .dropdown ul.dropdown-menu li a.checkout_btn:hover{
     display: block;
     font-size: 18px;
     font-weight: 600;
-    color: #333;
+    color: #20B1B6;
     text-decoration: none;
     margin-bottom: 4px;
 }
 .book_details .book_details_content p{
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 600;
     color: #333;
 }

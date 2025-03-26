@@ -31,21 +31,30 @@
 </li>
 @endif
 
-{{-- <li class="list-group-item d-flex justify-content-between bg-body-tertiary">
-<div class="text-success">
-    <h6 class="my-0">Promo code</h6>
-    <small>EXAMPLECODE</small>
-</div>
-<span class="text-success">− BDT 50</span>
-</li> --}}
-<li class="p-3 list-group-item d-flex justify-content-between">
-@php $cartTotal = 0 @endphp
-@foreach((array) session('cart') as $id => $details)
-    @php
-        $cartTotal += ($details['discount_price'] > 0 ? $details['discount_price'] : $details['price']) * $details['quantity']
-    @endphp
-@endforeach
+@if(session('discount') && session('discount') > 0)
+<li class="list-group-item d-flex justify-content-between bg-body-tertiary">
+    <div class="text-success">
+        <h6 class="my-0">Promo code</h6>
+        <small>{{session('coupon')}}</small>
+    </div>
+    <span class="text-success">− {{session('discount')}}<sup>৳</sup></span>
+</li>
+@endif
 
-<strong>Total Price</strong>
-<strong>{{number_format($cartTotal)}}<sup>৳</sup></strong>
+<li class="p-3 list-group-item d-flex justify-content-between">
+    @php $cartTotal = 0 @endphp
+    @foreach((array) session('cart') as $id => $details)
+        @php
+            $cartTotal += ($details['discount_price'] > 0 ? $details['discount_price'] : $details['price']) * $details['quantity']
+        @endphp
+    @endforeach
+
+    @php
+        if(session('discount') && session('discount') > 0){
+            $cartTotal = $cartTotal - session('discount');
+        }
+    @endphp
+
+    <strong>Total Price</strong>
+    <strong>{{number_format($cartTotal)}}<sup>৳</sup></strong>
 </li>

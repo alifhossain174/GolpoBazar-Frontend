@@ -138,6 +138,11 @@ class CartController extends Controller
     }
 
     public function viewCart(){
+        if(!session('cart') || (session('cart') && count(session('cart')) <= 0)){
+            Toastr::error('No Books Found in Cart', 'Failed to Checkout');
+            return redirect('/');
+        }
+
         return view('view_cart');
     }
 

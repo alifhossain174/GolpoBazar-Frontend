@@ -157,12 +157,12 @@
                         @include('cart_items')
                     </ul>
 
-                    {{-- <form class="card p-2">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Promo code">
-                        <button type="button" class="btn btn-secondary">Redeem</button>
+                    <div class="card p-2">
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="coupon_code" @if(session('coupon')) value="{{session('coupon')}}" @endif id="coupon_code" placeholder="Promo code">
+                            <button type="button" class="btn btn-secondary" onclick="applyCoupon()">Redeem</button>
+                        </div>
                     </div>
-                </form> --}}
                 </div>
 
                 <div class="col-md-5 col-lg-5">
@@ -171,8 +171,8 @@
                         @csrf
                         <div class="row g-3">
                             <div class="col-12">
-                                <label for="phone" class="form-label">Phone Number</label>
-                                <input type="text" name="phone" value="" class="form-control" id="phone" placeholder="+8801XXXXXXXXX" required readonly>
+                                <label for="username" class="form-label">Write Users's Phone/Email</label>
+                                <input type="text" name="username" class="form-control" id="username" placeholder="Phone or Email" required>
                             </div>
                         </div>
 
@@ -221,4 +221,51 @@
             </div>
         </main>
     </div>
+@endsection
+
+@section('footer_js')
+
+    <script>
+        function applyCoupon() {
+            var couponCode = $("#coupon_code").val();
+
+            if (couponCode == '') {
+                toastr.options.positionClass = 'toast-bottom-right';
+                toastr.options.timeOut = 1000;
+                toastr.error("Please Enter a Coupon Code");
+                return false;
+            }
+
+            var formData = new FormData();
+            formData.append("coupon_code", couponCode);
+            $.ajax({
+                data: formData,
+                url: "{{ url('apply/coupon') }}",
+                type: "POST",
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function(data) {
+                    if (data.status == 0) {
+                        toastr.options.positionClass = 'toast-bottom-right';
+                        toastr.options.timeOut = 1000;
+                        toastr.error(data.message);
+                        $("#view_cart_items").html(data.checkoutTotalAmount);
+                        renderLazyImage();
+                    } else {
+                        toastr.options.positionClass = 'toast-bottom-right';
+                        toastr.options.timeOut = 1000;
+                        toastr.success(data.message);
+                        $("#view_cart_items").html(data.checkoutTotalAmount);
+                        renderLazyImage();
+                    }
+                },
+                error: function(data) {
+                    console.log('Error:', data);
+                }
+            });
+
+        }
+    </script>
+
 @endsection

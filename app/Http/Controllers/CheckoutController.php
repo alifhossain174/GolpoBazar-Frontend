@@ -12,6 +12,63 @@ use Carbon\Carbon;
 
 class CheckoutController extends Controller
 {
+
+    public function applyCoupon(Request $request){
+
+        $couponCode = $request->coupon_code;
+        $couponInfo = DB::table('promo_codes')->where('code', $couponCode)->first();
+        if($couponInfo){
+
+            if($couponInfo->expire_date < date("Y-m-d")){
+                session([
+                    'coupon' => $couponCode,
+                    'discount' => 0
+                ]);
+                $checkoutTotalAmount = view('cart_items')->render();
+                return response()->json(['message' => 'Coupon is Expired', 'status' => 0, 'checkoutTotalAmount' => $checkoutTotalAmount]);
+            }
+
+            $subTotal = 0;
+            foreach((array) session('cart') as $id => $details){
+                $subTotal += $details['price'] * $details['quantity'];
+            }
+
+            if($couponInfo->minimum_order_value && $couponInfo->minimum_order_value > $subTotal){
+                session([
+                    'coupon' => $couponCode,
+                    'discount' => 0
+                ]);
+                $checkoutTotalAmount = view('cart_items')->render();
+                return response()->json(['message' => 'Sorry! Minimum Order Amount is '.$couponInfo->minimum_order_value, 'status' => 0, 'checkoutTotalAmount' => $checkoutTotalAmount]);
+            }
+
+            $discount = 0;
+            if($couponInfo->type == 1){
+                $discount = $couponInfo->value;
+            } else {
+                $discount = number_format(($subTotal*$couponInfo->value)/100, 2);
+            }
+
+            session([
+                'coupon' => $couponCode,
+                'discount' => $discount
+            ]);
+
+            $checkoutTotalAmount = view('cart_items')->render();
+            return response()->json(['message' => 'Coupon Applied Successfully', 'status' => 1, 'checkoutTotalAmount' => $checkoutTotalAmount]);
+
+
+        } else {
+            session([
+                'coupon' => $couponCode,
+                'discount' => 0
+            ]);
+            $checkoutTotalAmount = view('cart_items')->render();
+            return response()->json(['message' => 'Sorry No Coupon Found', 'status' => 0, 'checkoutTotalAmount' => $checkoutTotalAmount]);
+        }
+
+    }
+
     public function placeOrder(Request $request){
 
         if(!session('cart') || (session('cart') && count(session('cart')) <= 0)){
@@ -19,7 +76,12 @@ class CheckoutController extends Controller
             return redirect('/');
         }
 
-        $userInfo = DB::table('users')->where('phone', $request->phone)->first();
+        if(!$request->username){
+            Toastr::error('Please Provide Phone or Email', 'Phone or Email is Required');
+            return redirect()->back();
+        }
+
+        $userInfo = DB::table('users')->where('phone', $request->username)->orWhere('email', $request->username)->first();
         if(!$userInfo){
             Toastr::error('No User Account Found', 'Phone No not found');
             return redirect()->back();

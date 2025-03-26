@@ -39,12 +39,12 @@
                         <p>
                             @php
                                 $randBookFullDes = strip_tags($randomBook->description);
-                                $randomBookDescription = (mb_strlen($randBookFullDes, 'UTF-8') > 500) ? mb_substr($randBookFullDes, 0, 500, 'UTF-8') . "..." : $randBookFullDes;
+                                $randomBookDescription = (mb_strlen($randBookFullDes, 'UTF-8') > 400) ? mb_substr($randBookFullDes, 0, 400, 'UTF-8') . "..." : $randBookFullDes;
                             @endphp
                             {{$randomBookDescription}}
                         </p>
 
-                        <h6 class="categories">Category</h6>
+                        <h6 class="categories" style="margin-bottom: 4px">Category</h6>
                         <span class="badge text-bg-secondary">{{$randomBook->category_name}}</span>
 
                         <h5 class="price">
@@ -86,10 +86,11 @@
                             }
                         </style>
 
-                        <a class="btn btn-sm rounded readBook" href="intent://{{ $bookURL }}#Intent;scheme=https;package={{ $packageName }};S.browser_fallback_url={{ $encodedFallbackURL }};end;"
+                        <a class="btn btn-sm rounded readBook d-inline-block mb-2" href="intent://{{ $bookURL }}#Intent;scheme=https;package={{ $packageName }};S.browser_fallback_url={{ $encodedFallbackURL }};end;"
                         onclick="return handleAppLink(event, '{{ $bookURL }}', '{{ $playStoreURL }}');">
                         <i class="fas fa-book-open"></i> &nbsp;বইটি পড়ুন
                         </a>
+                        <br>
 
                         <script>
                             function handleAppLink(event, bookURL, fallbackURL) {
