@@ -24,6 +24,13 @@ Auth::routes([
     'verify' => false, // Email Verification Routes...
 ]);
 
+
+Route::get('.well-known/assetlinks.json', function () {
+    $file = file_get_contents(public_path('assetlinks.json'));
+    return response($file, 200)->header('Content-Type', 'application/json');
+});
+
+
 Route::get('/', [FrontendController::class, 'index'])->name('home');
 Route::get('/book/{slug}', [FrontendController::class, 'bookDetails'])->name('BookDetails');
 Route::get('/shop', [FrontendController::class, 'shop'])->name('Shop');

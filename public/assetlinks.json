@@ -1,0 +1,11 @@
+[
+    {
+        "relation": ["delegate_permission/common.handle_all_urls"],
+        "target": {
+        "namespace": "android_app",
+        "package_name": "app.gstl.golpobazar",
+        "sha256_cert_fingerprints":
+            ["05:FB:31:45:65:D9:C5:9F:82:7D:ED:DF:E2:96:07:EA:71:1C:EF:F2:5D:02:08:EC:3B:09:A5:06:26:69:E3:25"]
+        }
+    }
+]
