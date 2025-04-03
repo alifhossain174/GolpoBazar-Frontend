@@ -12,7 +12,7 @@
     <meta name="url" content="{{env('APP_URL')."/book/".$book->slug}}">
 
     {{-- Page Title & Favicon --}}
-    <title>@if($book->meta_title) {{$book->meta_title}} @else {{$book->name}} @endif</title>
+    <title>{{$book->name}} - {{$book->author_name}} - Golpo Bazar - গল্প বাজার</title>
     @if($generalInfo && $generalInfo->fav_icon)<link rel="icon" href="{{env('ADMIN_URL')."/".($generalInfo->fav_icon)}}" type="image/x-icon"/>@endif
 
 
@@ -149,7 +149,7 @@
 
                             <a class="btn btn-sm rounded readBook d-inline-block mb-2" href="intent://{{ $bookURL }}#Intent;scheme=https;package={{ $packageName }};S.browser_fallback_url={{ $encodedFallbackURL }};end;"
                             onclick="return handleAppLink(event, '{{ $bookURL }}', '{{ $playStoreURL }}');">
-                            <i class="fas fa-book-open"></i> &nbsp;বইটি পড়ুন
+                            @if($book->is_audio == 1) <i class="fas fa-volume-up"></i> &nbsp;বইটি শুনুন @else <i class="fas fa-book-open"></i> &nbsp;বইটি পড়ুন @endif
                             </a>
                             <br>
 

@@ -4,13 +4,7 @@
     @php
         $generalInfo = DB::table('general_infos')->where('id', 1)->first();
     @endphp
-    <title>
-        @if ($generalInfo && $generalInfo->tab_title)
-            {{ $generalInfo->tab_title }}
-        @else
-            {{ $generalInfo->company_name }}
-        @endif
-    </title>
+    <title>Publishers । Golpo Bazar - গল্প বাজার</title>
     @if ($generalInfo && $generalInfo->fav_icon)
         <link rel="icon" href="{{ env('ADMIN_URL') . '/' . $generalInfo->fav_icon }}" type="image/x-icon" />
     @endif
