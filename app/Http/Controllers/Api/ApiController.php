@@ -2241,7 +2241,7 @@ class ApiController extends BaseController
                     // if($subscribedStatus){
                     //     $is_package_subscribed = 1;
                     // }
-                    
+
                     $subscribedStatus = DB::table('subscription_purchases')
                                             ->leftJoin('subscription_packages', 'subscription_purchases.subscription_id', 'subscription_packages.id')
                                             ->where('subscription_purchases.user_id', $request->user_id)
@@ -2259,7 +2259,7 @@ class ApiController extends BaseController
                     } else {
                         $is_package_subscribed = 0;
                     }
-                    
+
                 }
             }
 
@@ -2445,7 +2445,7 @@ class ApiController extends BaseController
             ], 422);
         }
     }
-    
+
     public function adMobConfig(Request $request){
         if ($request->header('Authorization') == ApiController::AUTHORIZATION_TOKEN) {
 
@@ -2465,7 +2465,7 @@ class ApiController extends BaseController
                 'native_show_status' => strval($data->native_show_status),
                 'interstitial_show_status' => strval($data->interstitial_show_status),
             );
-            
+
             return response()->json([
                 'success' =>true,
                 'data' => $data
