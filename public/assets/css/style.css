@@ -278,13 +278,14 @@ nav .dropdown ul.dropdown-menu li a.checkout_btn:hover{
 .author_section h4.author_section_title{
     font-size: 1.5rem;
     font-weight: 600;
-    margin-bottom: 30px;
+    margin-bottom: 0px;
 }
 .author_section .author_card{
     background: #70C1C436;
     border-radius: 8px;
     padding: 20px;
     text-align: center;
+    width: 100%;
 }
 
 .author_section .author_card .author_image{
@@ -309,12 +310,6 @@ nav .dropdown ul.dropdown-menu li a.checkout_btn:hover{
     color: #1e1e1e;
     margin-bottom: 16px;
 }
-/* .author_section .author_card .author_content p.author_bio{
-    font-size: 16px;
-    line-height: 20px;
-    color: #1e1e1e;
-    margin-bottom: 10px;
-} */
 .author_section .author_card .author_content span.total_books{
     font-size: 16px;
     line-height: 20px;
@@ -330,12 +325,29 @@ nav .dropdown ul.dropdown-menu li a.checkout_btn:hover{
     font-weight: 600;
     box-shadow: 2px 2px 5px #bfbfbf;
 }
-.author_section #bookAuthorCarousel .carousel-indicators{
-    bottom: -60px !important;
+
+.author_section .swiper-container {
+    width: 100%;
+    margin: 0 auto;
+    overflow: hidden;
+    position: relative;
+    height: 380px;
 }
 
-.author_section #bookAuthorCarousel .carousel-indicators [data-bs-target]{
-    background-color: #007a7e;
+.author_section .swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.author_section .swiper-button-next,
+.swiper-button-prev {
+    color: black;
+}
+
+.author_section .swiper-pagination-bullet-active{
+    background: #1FB0B5 !important;
 }
 
 

@@ -81,7 +81,7 @@
     }
     .author_section h4.author_section_title {
         font-size: 20px;
-        margin-bottom: 20px;
+        margin-bottom: 0px;
     }
     .author_section .author_card{
         padding: 16px;
@@ -101,9 +101,10 @@
         padding: 4px 10px;
         font-size: 14px;
     }
-    .author_section #bookAuthorCarousel .carousel-indicators {
-        bottom: -30px !important;
+    .author_section .swiper-container {
+        height: 320px;
     }
+
 
     /* footer css */
     .footer{

@@ -17,14 +17,15 @@
 
     @stack('site-seo')
 
-    <link rel="stylesheet" href="{{url('assets')}}/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url('assets') }}/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="{{ url('assets') }}/css/toastr.min.css">
-    <link rel="stylesheet" href="{{url('assets')}}/css/style.css">
-    <link rel="stylesheet" href="{{url('assets')}}/css/responsive.css">
+    <link rel="stylesheet" href="{{ url('assets') }}/css/swiper-bundle.min.css">
+    <link rel="stylesheet" href="{{ url('assets') }}/css/style.css">
+    <link rel="stylesheet" href="{{ url('assets') }}/css/responsive.css">
 
     <style>
-        button.removeFromCart{
+        button.removeFromCart {
             background-color: #de0000 !important;
         }
 
@@ -61,29 +62,60 @@
         }
 
         ul.live_search_box li.live_search_item a.live_search_product_link img.live_search_product_image {
-            width: 40px;
-            height: 40px;
-            min-width: 40px;
-            min-height: 40px;
+            width: 45px;
+            height: 70px;
+            min-width: 45px;
+            min-height: 70px;
             border: 1px solid lightgray;
             border-radius: 4px
         }
 
         ul.live_search_box li.live_search_item a.live_search_product_link h6.live_search_product_title {
-            margin-left: 8px;
+            margin-left: 4px;
             margin-top: 2px;
-            margin-bottom: 0px;
+            margin-bottom: 4px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            width: 148px;
             font-size: 14px;
+            color: #1e1e1e;
+            font-weight: 600;
+        }
+
+        ul.live_search_box li.live_search_item a.live_search_product_link h5.live_search_book_author {
+            margin-left: 6px;
+            margin-top: 0px;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 150px;
+            font-size: 12px;
+            color: #1e1e1e;
+            font-weight: 500;
         }
 
         ul.live_search_box li.live_search_item a.live_search_product_link span.live_search_product_price {
             display: block;
+            margin-left: 6px;
             margin-top: 2px;
-            color: var(--primary-color);
-            font-size: 13px;
+            color: #20B1B6;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        ul.live_search_box li.live_search_item a.live_search_product_link .book_details span.bookTag{
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            border: 1px solid #cacaca;
+            padding: 0px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            line-height: 17px;
+            background:#eee;
+            color: gray;
         }
 
         /* live search css end */
@@ -92,6 +124,7 @@
     @yield('header_css')
 
 </head>
+
 <body>
 
     @include('header')
@@ -101,10 +134,37 @@
     @include('footer')
 
 
-    <script src="{{url('assets')}}/js/bootstrap.bundle.min.js"></script>
-    <script src="{{url('assets')}}/js/jquery-3.7.1.min.js"></script>
-    <script>
+    <script src="{{ url('assets') }}/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url('assets') }}/js/jquery-3.7.1.min.js"></script>
 
+    <script src="{{ url('assets') }}/js/swiper-bundle.min.js"></script>
+    <script>
+        var swiper = new Swiper('.swiper-container', {
+            spaceBetween: 20, // Space between slides
+            loop: true, // Infinite loop of slides
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            breakpoints: {
+                1200: { // For screens 1200px or larger
+                    slidesPerView: 4,
+                },
+                768: { // For screens 768px to 1199px
+                    slidesPerView: 3,
+                },
+                480: { // For screens smaller than 768px
+                    slidesPerView: 1,
+                }
+            }
+        });
+    </script>
+
+    <script>
         function renderLazyImage() {
             var lazyloadImages;
             if ("IntersectionObserver" in window) {
@@ -246,7 +306,7 @@
         }
 
         function socialShare(url) {
-            navigator.clipboard.writeText("{{ env('APP_URL') }}/book/"+url);
+            navigator.clipboard.writeText("{{ env('APP_URL') }}/book/" + url);
             toastr.success("Book Link Copied");
         }
     </script>
@@ -258,4 +318,5 @@
     {!! Toastr::message() !!}
 
 </body>
+
 </html>

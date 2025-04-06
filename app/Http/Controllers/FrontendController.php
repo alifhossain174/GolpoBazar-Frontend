@@ -18,7 +18,7 @@ class FrontendController extends Controller
                         ->first();
 
         $categories = DB::table('categories')->where('status', 1)->orderBy('serial', 'asc')->get();
-        $bookAuthors = DB::table('users')->where('status', 1)->where('user_type', 2)->inRandomOrder()->limit(8)->get();
+        $bookAuthors = DB::table('users')->where('status', 1)->where('user_type', 2)->inRandomOrder()->limit(12)->get();
 
         return view('index', compact('randomBook', 'categories', 'bookAuthors'));
     }
@@ -171,10 +171,12 @@ class FrontendController extends Controller
     public function productLiveSearch(Request $request){
 
         $searchProducts = DB::table('products')
-                            ->where('name', 'LIKE', '%'.$request->search_keyword.'%')
+                            ->leftJoin('users', 'products.author_id', 'users.id')
+                            ->select('products.*', 'users.name as author_name')
+                            ->where('products.name', 'LIKE', '%'.$request->search_keyword.'%')
                             ->where('products.status', 1)
-                            ->where('status', 1)
-                            ->orderBy('name', 'asc')
+                            ->where('products.status', 1)
+                            ->orderBy('products.name', 'asc')
                             ->skip(0)
                             ->limit(3)
                             ->get();

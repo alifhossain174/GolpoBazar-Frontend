@@ -110,10 +110,18 @@
 
                             <h5 class="price">
                                 @if($book->discount_price && $book->discount_price < $book->price)
-                                    <small><del>{{number_format($book->price)}}<sup>৳</sup></del></small>
-                                    {{number_format($book->discount_price)}}<sup>৳</sup>
+                                    @if($book->discount_price == 0)
+                                        <span>Free</span>
+                                    @else
+                                        <small><del>{{number_format($book->price)}}<sup>৳</sup></del></small>
+                                        {{number_format($book->discount_price)}}<sup>৳</sup>
+                                    @endif
                                 @else
-                                    {{number_format($book->price)}}<sup>৳</sup>
+                                    @if($book->price == 0)
+                                        <span>Free</span>
+                                    @else
+                                        {{number_format($book->price)}}<sup>৳</sup>
+                                    @endif
                                 @endif
                             </h5>
 
