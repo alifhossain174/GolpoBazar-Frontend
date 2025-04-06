@@ -63,7 +63,7 @@ Route::get('clear/cart', [CartController::class, 'clearCart'])->name('ClearCart'
 // policy pages
 Route::get('terms/and/conditions', [PolicyController::class, 'termsAndConditions'])->name('TermsAndConditions');
 Route::get('privacy/policy', [PolicyController::class, 'privacyPolicy'])->name('PrivacyPolicy');
-Route::get('shipping/policy', [PolicyController::class, 'shippingPolicy'])->name('ShippingPolicy');
+Route::get('writer/benefit', [PolicyController::class, 'shippingPolicy'])->name('ShippingPolicy');
 Route::get('return/policy', [PolicyController::class, 'returnPolicy'])->name('ReturnPolicy');
 
 

@@ -53,8 +53,8 @@
             <ul>
                 <li><a href="{{ url('terms/and/conditions') }}">Terms & Condition</a></li>
                 <li><a href="{{ url('privacy/policy') }}">Privacy Policy</a></li>
-                <li><a href="{{ url('shipping/policy') }}">Shipping Policy</a></li>
                 <li><a href="{{ url('return/policy') }}">Return Policy</a></li>
+                <li><a href="{{ url('writer/benefit') }}">Writer Benefit</a></li>
                 {{-- <li><a href="{{url('/login')}}">My Account</a></li> --}}
             </ul>
         </div>
