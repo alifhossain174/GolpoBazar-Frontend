@@ -56,6 +56,7 @@ nav .dropdown ul.dropdown-menu li a.checkout_btn{
     color: white;
     text-shadow: 1px 1px 2px black;
     transition: all 0.1s linear;
+    width: 92%;
 }
 
 nav .dropdown ul.dropdown-menu li a.checkout_btn:hover{
@@ -961,4 +962,41 @@ a.footer_icon i{
     .copyright {
         text-align: left;
     }
+}
+
+/* css for sidebar cart */
+li.sidebar_cart_item a.dropdown-item{
+    display: flex;
+    padding: 4px 8px;
+}
+li.sidebar_cart_item a.dropdown-item img.sidebar_cart_item_image{
+    width: 45px;
+    height: 70px;
+}
+li.sidebar_cart_item a.dropdown-item .sidebar_cart_details {
+    position: relative;
+}
+li.sidebar_cart_item a.dropdown-item .sidebar_cart_details h5.sidebar_cart_book_name{
+    font-size: 14px;
+    padding: 4px 0px 0px 6px;
+    color: #1e1e1e;
+    font-weight: 500;
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 150px;
+}
+li.sidebar_cart_item a.dropdown-item .sidebar_cart_details h6.sidebar_cart_book_author{
+    font-size: 12px;
+    padding-left: 6px;
+    color: gray;
+    font-weight: 400;
+    margin-bottom: 4px;
+}
+li.sidebar_cart_item a.dropdown-item .sidebar_cart_details span.sidebar_cart_price{
+    color: #20B1B6;
+    padding-left: 6px;
+    font-size: 15px;
+    font-weight: 600;
 }

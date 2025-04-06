@@ -9,7 +9,7 @@
                     </h4>
                 </div>
                 <div class="col-4 text-end">
-                    <a href="{{url('/shop')}}" class="book_category_visit">See More</a>
+                    <a href="{{url('/books')}}" class="book_category_visit">See More</a>
                 </div>
             </div>
 

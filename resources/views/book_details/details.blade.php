@@ -15,14 +15,13 @@
     <title>{{$book->name}} - {{$book->author_name}} - Golpo Bazar - গল্প বাজার</title>
     @if($generalInfo && $generalInfo->fav_icon)<link rel="icon" href="{{env('ADMIN_URL')."/".($generalInfo->fav_icon)}}" type="image/x-icon"/>@endif
 
-
     @php
         $bookFullDesForOg = strip_tags($book->description);
         $bookShortOgDesc = (mb_strlen($bookFullDesForOg, 'UTF-8') > 100) ? mb_substr($bookFullDesForOg, 0, 100, 'UTF-8') . "..." : $bookFullDesForOg;
     @endphp
 
     {{-- open graph meta --}}
-    <meta property="og:title" content="@if($book->meta_title){{$book->meta_title}}@else{{$book->name}}@endif"/>
+    <meta property="og:title" content="@if($book->meta_title){{$book->meta_title}}@else{{$book->name}} - {{$book->author_name}}@endif"/>
     <meta property="og:type" content="book"/>
     <meta property="og:url" content="{{env('APP_URL')."/book/".$book->slug}}"/>
     <meta property="og:image" content="{{env('ADMIN_URL')."/".$book->image}}"/>
@@ -72,7 +71,7 @@
                             @if($book->is_audio == 1)
                             <p class="mb-0">Category: <a href="{{url('audio/books')}}?category={{$book->category_slug}}">{{$book->category_name}}</a></p>
                             @else
-                            <p class="mb-0">Category: <a href="{{url('shop')}}?category={{$book->category_slug}}">{{$book->category_name}}</a></p>
+                            <p class="mb-0">Category: <a href="{{url('books')}}?category={{$book->category_slug}}">{{$book->category_name}}</a></p>
                             @endif
 
                             <p class="mb-0">Language: <span style="font-weight: 500">{{$book->language}}</span></p>
@@ -108,6 +107,9 @@
                                 @endif
                             </p>
 
+                            @php
+                                $bookFinalPrice = 0; //for showing Add to Cart button, beacuse free book will not have cart button
+                            @endphp
                             <h5 class="price">
                                 @if($book->discount_price && $book->discount_price < $book->price)
                                     @if($book->discount_price == 0)
@@ -115,12 +117,18 @@
                                     @else
                                         <small><del>{{number_format($book->price)}}<sup>৳</sup></del></small>
                                         {{number_format($book->discount_price)}}<sup>৳</sup>
+                                        @php
+                                            $bookFinalPrice = $book->discount_price;
+                                        @endphp
                                     @endif
                                 @else
                                     @if($book->price == 0)
                                         <span>Free</span>
                                     @else
                                         {{number_format($book->price)}}<sup>৳</sup>
+                                        @php
+                                            $bookFinalPrice = $book->price;
+                                        @endphp
                                     @endif
                                 @endif
                             </h5>
@@ -159,6 +167,9 @@
                             onclick="return handleAppLink(event, '{{ $bookURL }}', '{{ $playStoreURL }}');">
                             @if($book->is_audio == 1) <i class="fas fa-volume-up"></i> &nbsp;বইটি শুনুন @else <i class="fas fa-book-open"></i> &nbsp;বইটি পড়ুন @endif
                             </a>
+                            @if($bookFinalPrice == 0)
+                            <button onclick="socialShare('{{$book->slug}}')" class="btn social-share-btn" style="margin-top: -9px;"><i class="fas fa-share-alt"></i></button>
+                            @endif
                             <br>
 
                             <script>
@@ -172,13 +183,15 @@
                                 }
                             </script>
 
-                            @if (isset(session()->get('cart')[$book->id]))
-                            <button data-id="{{$book->id}}" class="cart-{{$book->id}} removeFromCart btn add_to_cart"><i class="fas fa-times"></i> Remove from Cart</button>
-                            @else
-                            <button data-id="{{$book->id}}" class="cart-{{$book->id}} addToCart btn add_to_cart"><i class="fas fa-cart-plus"></i> Add to Cart</button>
+                            @if($bookFinalPrice != 0)
+                                @if (isset(session()->get('cart')[$book->id]))
+                                    <button data-id="{{$book->id}}" class="cart-{{$book->id}} removeFromCart btn add_to_cart"><i class="fas fa-times"></i> Remove from Cart</button>
+                                @else
+                                    <button data-id="{{$book->id}}" class="cart-{{$book->id}} addToCart btn add_to_cart"><i class="fas fa-cart-plus"></i> Add to Cart</button>
+                                @endif
+                                <button onclick="socialShare('{{$book->slug}}')" class="btn social-share-btn"><i class="fas fa-share-alt"></i></button>
                             @endif
 
-                            <button onclick="socialShare('{{$book->slug}}')" class="btn social-share-btn"><i class="fas fa-share-alt"></i></button>
                         </div>
 
                     </div>

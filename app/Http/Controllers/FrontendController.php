@@ -47,7 +47,7 @@ class FrontendController extends Controller
 
     }
 
-    public function shop(Request $request){
+    public function books(Request $request){
 
         $categories = DB::table('categories')->where('status', 1)->orderBy('serial', 'asc')->get();
         $bookAuthors = DB::table('users')->where('status', 1)->where('user_type', 2)->inRandomOrder()->get();
@@ -102,7 +102,7 @@ class FrontendController extends Controller
         }
 
         $books = $query->paginate(12);
-        $books->withPath('/shop'.$parameters);
+        $books->withPath('/books'.$parameters);
         return view('shop.shop', compact('books', 'bookAuthors', 'categories', 'publishers', 'categorySlug', 'publisherSlug', 'authorSlug', 'sort_by', 'search_keyword'));
 
     }
@@ -160,7 +160,7 @@ class FrontendController extends Controller
         }
 
         $books = $query->paginate(12);
-        $books->withPath('/shop'.$parameters);
+        $books->withPath('/books'.$parameters);
 
         $returnHTML = view('shop.products', compact('books'))->render();
         return response()->json(['rendered_view' => $returnHTML]);

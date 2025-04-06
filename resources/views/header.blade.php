@@ -12,7 +12,7 @@
                     <a class="nav-link @if(Request::path() == '/') active @endif" href="{{ url('/') }}">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link @if(Request::path() == 'shop') active @endif" href="{{url('/shop')}}">Books</a>
+                    <a class="nav-link @if(Request::path() == 'books') active @endif" href="{{url('/books')}}">Books</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link @if(Request::path() == 'audio/books') active @endif" href="{{url('/audio/books')}}">Audio Books</a>

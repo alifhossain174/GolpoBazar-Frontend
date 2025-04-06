@@ -18,7 +18,7 @@
                     @if($category->is_audio == 1)
                     <a href="{{url('audio/books')}}?category={{$category->slug}}" class="book_category_visit">See More</a>
                     @else
-                    <a href="{{url('shop')}}?category={{$category->slug}}" class="book_category_visit">See More</a>
+                    <a href="{{url('books')}}?category={{$category->slug}}" class="book_category_visit">See More</a>
                     @endif
                 </div>
             </div>

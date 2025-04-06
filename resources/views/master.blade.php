@@ -92,7 +92,7 @@
             text-overflow: ellipsis;
             width: 150px;
             font-size: 12px;
-            color: #1e1e1e;
+            color: gray;
             font-weight: 500;
         }
 
@@ -119,6 +119,11 @@
         }
 
         /* live search css end */
+
+        ul#sidebar_cart {
+            left: auto !important;
+            right: 0 !important;
+        }
     </style>
 
     @yield('header_css')
@@ -308,6 +313,10 @@
         function socialShare(url) {
             navigator.clipboard.writeText("{{ env('APP_URL') }}/book/" + url);
             toastr.success("Book Link Copied");
+        }
+        function authorSocialShare(url) {
+            navigator.clipboard.writeText("{{ env('APP_URL') }}/author/books/" + url);
+            toastr.success("Author's Link Copied");
         }
     </script>
 

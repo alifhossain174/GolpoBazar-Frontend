@@ -33,7 +33,7 @@ Route::get('.well-known/assetlinks.json', function () {
 
 Route::get('/', [FrontendController::class, 'index'])->name('home');
 Route::get('/book/{slug}', [FrontendController::class, 'bookDetails'])->name('BookDetails');
-Route::get('/shop', [FrontendController::class, 'shop'])->name('Shop');
+Route::get('/books', [FrontendController::class, 'books'])->name('Books');
 Route::post('/filter/books', [FrontendController::class, 'filterBooks'])->name('FilterBooks');
 Route::post('product/live/search', [FrontendController::class, 'productLiveSearch'])->name('ProductLiveSearch');
 

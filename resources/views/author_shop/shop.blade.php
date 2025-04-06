@@ -16,6 +16,17 @@
             box-shadow: none !important;
             background: transparent !important;
         }
+        button.author-social-share-btn{
+            border: none;
+            font-size: 14px;
+            padding: 6px 8px;
+            line-height: 18px;
+            margin-left: 8px;
+            border-radius: 6px;
+            background: lightgray;
+            color: #3a3a3a;
+            margin-top: 0px;
+        }
     </style>
 @endsection
 
@@ -35,7 +46,8 @@
                         @endif
 
                         <div class="publisher_author_content w-100">
-                            <h3>{{$authorInfo->name}}</h3>
+                            <h3 class="d-inline-block">{{$authorInfo->name}}</h3>
+                            <button onclick="authorSocialShare('{{$authorInfo->id}}')" class="author-social-share-btn"><i class="fas fa-share-alt"></i></button>
                             <p>{{$authorInfo->bio}}</p>
                             <span>Total Books: {{DB::table('products')->where('author_id', $authorInfo->id)->where('status', 1)->count()}}</span>
                         </div>

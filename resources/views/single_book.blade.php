@@ -7,14 +7,21 @@
         <div class="overlay">
             <div class="container-fluid">
                 <div class="row align-items-center">
+
+                    @php
+                        $bookFinalPrice = 0; //for showing Add to Cart button, beacuse free book will not have cart button
+                    @endphp
+
                     <div class="col book_price">
                         @if($book->discount_price && $book->discount_price < $book->price)
-
                             @if($book->discount_price == 0)
                                 <span>Free</span>
                             @else
                                 <small><del>{{number_format($book->price)}}<sup>৳</sup></del></small>
                                 {{number_format($book->discount_price)}}<sup>৳</sup>
+                                @php
+                                    $bookFinalPrice = $book->discount_price;
+                                @endphp
                             @endif
 
                         @else
@@ -22,14 +29,19 @@
                                 <span>Free</span>
                             @else
                                 {{number_format($book->price)}}<sup>৳</sup>
+                                @php
+                                    $bookFinalPrice = $book->price;
+                                @endphp
                             @endif
                         @endif
                     </div>
                     <div class="col text-end book_actions">
-                        @if (isset(session()->get('cart')[$book->id]))
-                            <button data-id="{{$book->id}}" class="cart-{{$book->id}} removeFromCart add-to-cart-btn"><i class="fas fa-times"></i></button>
-                        @else
-                            <button data-id="{{$book->id}}" class="cart-{{$book->id}} addToCart add-to-cart-btn"><i class="fas fa-cart-plus"></i></button>
+                        @if($bookFinalPrice != 0)
+                            @if (isset(session()->get('cart')[$book->id]))
+                                <button data-id="{{$book->id}}" class="cart-{{$book->id}} removeFromCart add-to-cart-btn"><i class="fas fa-times"></i></button>
+                            @else
+                                <button data-id="{{$book->id}}" class="cart-{{$book->id}} addToCart add-to-cart-btn"><i class="fas fa-cart-plus"></i></button>
+                            @endif
                         @endif
                         <button onclick="socialShare('{{$book->slug}}')" class="social-share-btn"><i class="fas fa-share-alt"></i></button>
                     </div>

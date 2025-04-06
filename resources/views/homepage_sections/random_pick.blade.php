@@ -47,6 +47,9 @@
                         <h6 class="categories" style="margin-bottom: 4px">Category</h6>
                         <span class="badge text-bg-secondary">{{$randomBook->category_name}}</span>
 
+                        @php
+                            $randomBookFinalPrice = 0; //for showing Add to Cart button, beacuse free book will not have cart button
+                        @endphp
                         <h5 class="price">
                             @if($randomBook->discount_price && $randomBook->discount_price < $randomBook->price)
                                 @if($randomBook->discount_price == 0)
@@ -54,12 +57,18 @@
                                 @else
                                     <small><del>{{number_format($randomBook->price)}}<sup>৳</sup></del></small>
                                     {{number_format($randomBook->discount_price)}}<sup>৳</sup>
+                                    @php
+                                        $randomBookFinalPrice = $randomBook->discount_price;
+                                    @endphp
                                 @endif
                             @else
                                 @if($randomBook->price == 0)
                                     <span>Free</span>
                                 @else
                                     {{number_format($randomBook->price)}}<sup>৳</sup>
+                                    @php
+                                        $randomBookFinalPrice = $randomBook->price;
+                                    @endphp
                                 @endif
                             @endif
                         </h5>
@@ -98,6 +107,9 @@
                         onclick="return handleAppLink(event, '{{ $bookURL }}', '{{ $playStoreURL }}');">
                         @if($randomBook->is_audio == 1) <i class="fas fa-volume-up"></i> &nbsp;বইটি শুনুন @else <i class="fas fa-book-open"></i> &nbsp;বইটি পড়ুন @endif
                         </a>
+                        @if($randomBookFinalPrice == 0)
+                            <button onclick="socialShare('{{$randomBook->slug}}')" class="btn social-share-btn" style="margin-top: -8px;"><i class="fas fa-share-alt"></i></button>
+                        @endif
                         <br>
 
                         <script>
@@ -111,13 +123,14 @@
                             }
                         </script>
 
-                        @if (isset(session()->get('cart')[$randomBook->id]))
-                            <button data-id="{{$randomBook->id}}" class="cart-{{$randomBook->id}} removeFromCart btn add_to_cart"><i class="fas fa-times"></i> Remove from Cart</button>
-                        @else
-                            <button data-id="{{$randomBook->id}}" class="cart-{{$randomBook->id}} addToCart btn add_to_cart"><i class="fas fa-cart-plus"></i> Add to Cart</button>
+                        @if($randomBookFinalPrice != 0)
+                            @if (isset(session()->get('cart')[$randomBook->id]))
+                                <button data-id="{{$randomBook->id}}" class="cart-{{$randomBook->id}} removeFromCart btn add_to_cart"><i class="fas fa-times"></i> Remove from Cart</button>
+                            @else
+                                <button data-id="{{$randomBook->id}}" class="cart-{{$randomBook->id}} addToCart btn add_to_cart"><i class="fas fa-cart-plus"></i> Add to Cart</button>
+                            @endif
+                            <button onclick="socialShare('{{$randomBook->slug}}')" class="btn social-share-btn"><i class="fas fa-share-alt"></i></button>
                         @endif
-
-                        <button onclick="socialShare('{{$randomBook->slug}}')" class="btn social-share-btn"><i class="fas fa-share-alt"></i></button>
                     </div>
                 </div>
             </div>

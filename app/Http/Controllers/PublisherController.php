@@ -69,11 +69,13 @@ class PublisherController extends Controller
         // ============== applying filters from url parameter end ================
 
         $books = $query->paginate(12);
-        $books->withPath('/shop'.$parameters);
+        $books->withPath('/publisher/books/'.$slug.'/'.$parameters);
         return view('publisher_shop.shop', compact('publisherInfo', 'books', 'categories', 'bookAuthors', 'categorySlug', 'authorSlug', 'sort_by', 'search_keyword'));
     }
 
     public function filterPublisherBooks(Request $request){
+
+        $publisherInfo = DB::table('brands')->where('id', $request->publisher)->first();
 
         // main query
         $query = DB::table('products')
@@ -122,7 +124,7 @@ class PublisherController extends Controller
         }
 
         $books = $query->paginate(12);
-        $books->withPath('/shop'.$parameters);
+        $books->withPath('/publisher/books/'.$publisherInfo->slug.'/'.$parameters);
 
         $returnHTML = view('publisher_shop.products', compact('books'))->render();
         return response()->json(['rendered_view' => $returnHTML]);
