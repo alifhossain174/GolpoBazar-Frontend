@@ -178,6 +178,12 @@
                                         window.location.href = fallbackURL;
                                         return false;
                                     }
+
+                                    // Optional: Delay fallback after short time
+                                    setTimeout(() => {
+                                        window.location.href = fallbackURL;
+                                    }, 2500); // fallback if app doesn't open in 2.5 seconds
+
                                     // Allow Android devices to use intent link
                                     return true;
                                 }
