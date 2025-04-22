@@ -159,7 +159,7 @@ class CheckoutController extends Controller
             session([
                 'order_id' => $orderId,
                 'customer_name' => $userInfo->name,
-                'customer_email' => $userInfo->phone,
+                'customer_email' => $userInfo->email ? $userInfo->email : $userInfo->phone,
             ]);
             return redirect('sslcommerz/order');
         }

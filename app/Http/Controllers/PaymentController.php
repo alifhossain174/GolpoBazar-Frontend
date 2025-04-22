@@ -12,6 +12,10 @@ class PaymentController extends Controller
 {
     public function order()
     {
+
+        echo session('customer_email');
+        exit();
+
         //  DO YOU ORDER SAVING PROCESS TO DB OR ANYTHING
         $orderData = DB::table('orders')->where('id', session('order_id'))->first();
         $sslc = new SSLCommerz();

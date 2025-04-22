@@ -74,8 +74,8 @@
                         </h5>
 
                         @php
-                            // $bookURL = env('APP_URL')."/book/".$book->slug;
-                            $bookURL = "https://golpobazar.com/book/".$randomBook->slug;
+                            $bookSlug = $randomBook->slug;
+                            $bookURLPath = "golpobazar.com/book/{$bookSlug}";
                             $packageName = "app.gstl.golpobazar";
                             $playStoreURL = "https://play.google.com/store/apps/details?id=" . $packageName;
                             $encodedFallbackURL = urlencode($playStoreURL);
@@ -103,8 +103,8 @@
                             }
                         </style>
 
-                        <a class="btn btn-sm rounded readBook d-inline-block mb-2" href="intent://{{ $bookURL }}#Intent;scheme=https;package={{ $packageName }};S.browser_fallback_url={{ $encodedFallbackURL }};end;"
-                        onclick="return handleAppLink(event, '{{ $bookURL }}', '{{ $playStoreURL }}');">
+                        <a class="btn btn-sm rounded readBook d-inline-block mb-2" href="intent://{{ $bookURLPath }}#Intent;scheme=https;package={{ $packageName }};S.browser_fallback_url={{ $encodedFallbackURL }};end;"
+                        onclick="return handleAppLink(event, '{{ $bookURLPath }}', '{{ $playStoreURL }}');">
                         @if($randomBook->is_audio == 1) <i class="fas fa-volume-up"></i> &nbsp;বইটি শুনুন @else <i class="fas fa-book-open"></i> &nbsp;বইটি পড়ুন @endif
                         </a>
                         @if($randomBookFinalPrice == 0)
@@ -113,13 +113,15 @@
                         <br>
 
                         <script>
-                            function handleAppLink(event, bookURL, fallbackURL) {
-                                if (!navigator.userAgent.match(/Android/i)) {
-                                    // If not on Android, open the web link instead
+                            function handleAppLink(event, bookURLPath, fallbackURL) {
+                                if (!/Android/i.test(navigator.userAgent)) {
                                     event.preventDefault();
-                                    // window.location.href = bookURL;
-                                    window.location.href = 'https://play.google.com/store/apps/details?id=app.gstl.golpobazar&hl=en';
+                                    // For iOS or desktop, open fallback (Play Store or maybe mobile web?)
+                                    window.location.href = fallbackURL;
+                                    return false;
                                 }
+                                // Allow Android devices to use intent link
+                                return true;
                             }
                         </script>
 
