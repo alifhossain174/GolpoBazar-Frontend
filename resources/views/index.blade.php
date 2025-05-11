@@ -16,6 +16,12 @@
     @endif
 @endpush
 
+@push('android-app')
+    <meta property="al:android:url" content="https://golpobazar.com/book/{{ $randomBook->slug }}" />
+    <meta property="al:android:package" content="app.gstl.golpobazar" />
+    <meta property="al:android:app_name" content="Golpo Bazar" />
+@endpush
+
 @section('content')
 
     @include('homepage_sections.random_pick')

@@ -36,6 +36,12 @@
 
 @endpush
 
+@push('android-app')
+    <meta property="al:android:url" content="https://golpobazar.com/book/{{ $book->slug }}" />
+    <meta property="al:android:package" content="app.gstl.golpobazar" />
+    <meta property="al:android:app_name" content="Golpo Bazar" />
+@endpush
+
 @section('header_css')
     <style>
         .pagination {
@@ -163,8 +169,9 @@
 
                             <a class="btn btn-sm rounded readBook d-inline-block mb-2" href="intent://{{ $bookURLPath }}#Intent;scheme=https;package={{ $packageName }};S.browser_fallback_url={{ $encodedFallbackURL }};end;"
                             onclick="return handleAppLink(event, '{{ $bookURLPath }}', '{{ $playStoreURL }}');">
-                            @if($book->is_audio == 1) <i class="fas fa-volume-up"></i> &nbsp;বইটি শুনুন @else <i class="fas fa-book-open"></i> &nbsp;বইটি পড়ুন @endif
+                                @if($book->is_audio == 1) <i class="fas fa-volume-up"></i> &nbsp;বইটি শুনুন @else <i class="fas fa-book-open"></i> &nbsp;বইটি পড়ুন @endif
                             </a>
+
                             @if($bookFinalPrice == 0)
                             <button onclick="socialShare('{{$book->slug}}')" class="btn social-share-btn" style="margin-top: -9px;"><i class="fas fa-share-alt"></i></button>
                             @endif
@@ -217,6 +224,27 @@
             </div>
         </div>
     </section>
+
+    <!--for forcefully redirecting the user to play store when it visits this page from mobile device-->
+    <script>
+        (function () {
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+            // Detect Android
+            if (/Android/i.test(userAgent)) {
+                const packageName = "app.gstl.golpobazar";
+                const playStoreAppLink = "market://details?id=" + packageName;
+
+                // Try to open Play Store app
+                window.location.href = playStoreAppLink;
+
+                // Fallback to Play Store web if app store not available
+                setTimeout(() => {
+                    window.location.href = "https://play.google.com/store/apps/details?id=" + packageName;
+                }, 2000);
+            }
+        })();
+    </script>
 
     @include('book_details.reviews')
     @include('book_details.related_books')
