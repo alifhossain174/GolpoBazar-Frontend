@@ -104,6 +104,7 @@ class CheckoutController extends Controller
 
         $orderId = DB::table('orders')->insertGetId([
             'order_no' => time().rand(100,999),
+            'order_from' => 1,
             'user_id' => $userInfo->id,
             'order_date' => date("Y-m-d H:i:s"),
             'estimated_dd' => date('Y-m-d', strtotime("+7 day", strtotime(date("Y-m-d")))),
