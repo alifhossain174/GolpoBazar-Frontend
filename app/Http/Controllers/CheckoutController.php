@@ -16,17 +16,15 @@ class CheckoutController extends Controller
     public function applyCoupon(Request $request){
 
         $couponCode = $request->coupon_code;
-        $couponInfo = DB::table('promo_codes')->where('code', $couponCode)->first();
-        if($couponInfo){
+        $today = date("Y-m-d");
+        $couponInfo = DB::table('promo_codes')
+                        ->where('code', $couponCode)
+                        ->where('status', 1)
+                        ->where('effective_date', '<=', $today)
+                        ->where('expire_date', '>=', $today)
+                        ->first();
 
-            if($couponInfo->expire_date < date("Y-m-d")){
-                session([
-                    'coupon' => $couponCode,
-                    'discount' => 0
-                ]);
-                $checkoutTotalAmount = view('cart_items')->render();
-                return response()->json(['message' => 'Coupon is Expired', 'status' => 0, 'checkoutTotalAmount' => $checkoutTotalAmount]);
-            }
+        if($couponInfo){
 
             $subTotal = 0;
             foreach((array) session('cart') as $id => $details){
@@ -64,7 +62,7 @@ class CheckoutController extends Controller
                 'discount' => 0
             ]);
             $checkoutTotalAmount = view('cart_items')->render();
-            return response()->json(['message' => 'Sorry No Coupon Found', 'status' => 0, 'checkoutTotalAmount' => $checkoutTotalAmount]);
+            return response()->json(['message' => 'Invalid Coupon Code', 'status' => 0, 'checkoutTotalAmount' => $checkoutTotalAmount]);
         }
 
     }
