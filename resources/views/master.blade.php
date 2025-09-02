@@ -39,7 +39,7 @@
             z-index: 999;
             background: white;
             border: 1px solid lightgray;
-            width: 100%;
+            width: 97.5%;
             padding: 0px;
             border-radius: 0px 0px 4px 4px;
         }
@@ -73,7 +73,7 @@
         }
 
         ul.live_search_box li.live_search_item a.live_search_product_link h6.live_search_product_title {
-            margin-left: 4px;
+            /* margin-left: 4px;
             margin-top: 2px;
             margin-bottom: 4px;
             white-space: nowrap;
@@ -82,7 +82,18 @@
             width: 148px;
             font-size: 14px;
             color: #1e1e1e;
+            font-weight: 600; */
+            margin-left: 4px;
+            margin-top: 2px;
+            margin-bottom: 4px;
+            display: -webkit-box;              /* Required for multi-line clamp */
+            -webkit-line-clamp: 2;             /* Limit to 2 lines */
+            -webkit-box-orient: vertical;      /* Required for vertical layout */
+            overflow: hidden;                  /* Hide overflowing text */
+            font-size: 14px;
+            color: #1e1e1e;
             font-weight: 600;
+            width: 90%;
         }
 
         ul.live_search_box li.live_search_item a.live_search_product_link h5.live_search_book_author {
@@ -123,6 +134,10 @@
         /* live search css end */
 
         ul#sidebar_cart {
+            left: auto !important;
+            right: 0 !important;
+        }
+        ul#sidebar_cart_2 {
             left: auto !important;
             right: 0 !important;
         }
@@ -271,6 +286,7 @@
                 toastr.options.timeOut = 1000;
                 toastr.success("Added to Cart");
                 $("#sidebar_cart").html(data.rendered_cart);
+                $("#sidebar_cart_2").html(data.rendered_cart);
                 $("strong.cart-count").html(data.cartTotalQty);
             })
 
@@ -294,6 +310,7 @@
                 $("strong.cart-count").html(data.cartTotalQty);
                 $("span.view_cart_count").html(data.cartTotalQty);
                 $("#sidebar_cart").html(data.rendered_cart);
+                $("#sidebar_cart_2").html(data.rendered_cart);
                 $("#view_cart_items").html(data.viewCartItems);
                 renderLazyImage();
             })

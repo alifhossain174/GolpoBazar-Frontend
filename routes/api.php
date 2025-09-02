@@ -117,6 +117,8 @@ Route::group(['namespace' => 'Api'], function () {
         Route::post('get/purchased/items', [ApiController::class, 'getPurchasedItems']);
         Route::post('is/product/wishlisted', [ApiController::class, 'isProductWishlisted']);
 
+
+
     });
 
     Route::post('order/progress', [ApiController::class, 'orderProgress']);
@@ -139,6 +141,7 @@ Route::group(['namespace' => 'Api'], function () {
         Route::post('order/cart/checkout', [CartController::class, 'cartCheckout']);
         Route::post('gift/order/cart/checkout', [CartController::class, 'giftCartCheckout']);
         Route::post('order/checkout/buy/now/app', [CartController::class, 'checkoutBuyNow']); // for app only
+        Route::post('single/book/gift', [ApiController::class, 'singleBookGift']);
 
         // wishlists
         Route::post('add/to/wishlist', [CartController::class, 'addToWishList']);
@@ -176,7 +179,6 @@ Route::group(['namespace' => 'Api'], function () {
     Route::post('get/category/wise/blogs', [BlogController::class, 'getCategoryWiseBlogs']);
     Route::post('blog/details', [BlogController::class, 'blogDetails']);
 
-
     // search
     Route::post('search/by/book/name', [ApiController::class, 'searchByBookName']);
     Route::post('search/by/publisher/name', [ApiController::class, 'searchByPublisherName']);
@@ -186,5 +188,8 @@ Route::group(['namespace' => 'Api'], function () {
     // new api
     Route::post('chapter/view/count', [ApiController::class, 'chapterViewCount']);
     Route::get('ad/mob/config', [ApiController::class, 'adMobConfig']);
+    Route::post('homepage', [ApiController::class, 'homepage']);
+
+    Route::post('best/selling/books', [ApiController::class, 'bestSellingBooks']);
 
 });

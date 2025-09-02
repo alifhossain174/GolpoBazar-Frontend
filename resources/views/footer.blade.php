@@ -2,10 +2,15 @@
     <div class="footer-content">
         <!-- Left Column -->
         <div class="footer-info">
-            <a href="{{url('/')}}" class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1">
-                <img src="{{ url(env('ADMIN_URL') . '/' . $generalInfo->logo) }}" alt="{{ $generalInfo->company_name }}" width="22" height="22" class="d-inline-block align-text-top">
-                <h2 class="d-inline-block">{{ $generalInfo->company_name }}</h2>
+
+            <a href="{{ url('/') }}" class="mb-4 me-2 mb-md-0 text-body-secondary text-decoration-none d-flex align-items-center">
+                <img src="{{ url(env('ADMIN_URL') . '/' . $generalInfo->logo) }}"
+                    alt="{{ $generalInfo->company_name }}"
+                    width="45" height="45"
+                    class="me-2">
+                <h2 class="mb-1">{{ $generalInfo->company_name }}</h2>
             </a>
+
 
             <p>{{ $generalInfo->short_description }}</p>
 

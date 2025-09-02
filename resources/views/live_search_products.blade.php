@@ -2,7 +2,7 @@
     <li class="live_search_item">
         <a class="live_search_product_link" href="{{url('book')}}/{{$searchProduct->slug}}">
             <img class="live_search_product_image lazy" src="{{url('assets')}}/img/product-load.gif" data-src="{{url(env('ADMIN_URL')."/".$searchProduct->image)}}" alt="">
-            <div class="book_details m-0" style="position: relative">
+            <div class="book_details m-0 w-100" style="position: relative">
                 <h6 class="live_search_product_title">
                     {{$searchProduct->name}}
                 </h6>

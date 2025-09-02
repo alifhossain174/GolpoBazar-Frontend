@@ -35,7 +35,7 @@
                 @endguest --}}
             </ul>
 
-            <form class="d-flex" role="search" style="position: relative">
+            <form class="d-flex" role="search" style="position: relative; width: 300px">
                 <input class="form-control me-2" id="live_search" type="search" onkeyup="liveSearchProduct()" placeholder="Search for Books/Authors" aria-label="Search">
                 {{-- dont remove this html; this is for live search --}}
                 <ul class="live_search_box d-none">
@@ -59,7 +59,7 @@
             <button class="btn ms-2 dropdown cart_btn dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false" id="cartButton">
                 <strong class="cart-count">{{ session('cart') ? count(session('cart')) : 0 }}</strong> <i class="fas fa-cart-plus"></i>
             </button>
-            <ul class="dropdown-menu" id="sidebar_cart" data-bs-popper="static">
+            <ul class="dropdown-menu" id="sidebar_cart_2" data-bs-popper="static">
                 @include('sidebar_cart')
             </ul>
         </div>

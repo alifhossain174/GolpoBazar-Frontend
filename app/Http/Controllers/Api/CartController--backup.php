@@ -148,69 +148,51 @@ class CartController extends Controller
 
     public function applyCoupon(Request $request){
 
-        $today = date("Y-m-d");
-        $promoInfo = PromoCode::where('code', $request->coupon_code)
-                                ->where('status', 1)
-                                ->where('effective_date', '<=', $today)
-                                ->where('expire_date', '>=', $today)
-                                ->first();
+        $promoInfo = PromoCode::where('code', $request->coupon_code)->where('status', 1)->where('effective_date', '<=', date("Y-m-d"))->where('expire_date', '>=', date("Y-m-d"))->first();
+        $data = PromoCode::where('status', 100)->first();
 
-        if (!$promoInfo) {
-            return response()->json([
-                'success' => false,
-                'data' => null,
-                'message' => "Invalid Promo Code"
-            ], 200);
-        }
+        if($promoInfo){
 
-        // 2. Check minimum order amount
-        if (!empty($request->order_amount) && $request->order_amount < $promoInfo->minimum_order_value) {
-            return response()->json([
-                'success' => false,
-                'data' => null,
-                'message' => "Minimum Order Amount ".$promoInfo->minimum_order_value." is Required"
-            ], 200);
-        }
+            $alreadyUsed = Order::where('user_id', auth()->user()->id)->where('coupon_code', $request->coupon_code)->count();
 
-        $userId = auth()->id();
-        $alreadyUsed = Order::where('user_id', $userId)
-                            ->where('coupon_code', $request->coupon_code)
-                            ->count();
+            if($promoInfo->no_of_usage && $promoInfo->no_of_usage > 0){
+                if($alreadyUsed >= $promoInfo->no_of_usage){
+                    return response()->json([
+                        'success' => false,
+                        'data' => $data,
+                        'message' => "Promo Code is used maximum time"
+                    ], 200);
+                }
+            }
 
-        if ($promoInfo->no_of_usage) {
-            if ($alreadyUsed >= $promoInfo->no_of_usage) {
+            if($alreadyUsed > 0){
                 return response()->json([
                     'success' => false,
-                    'data' => null,
-                    'message' => "Promo Code is used maximum time"
-                ], 200);
-            }
-        } else {
-            if ($alreadyUsed > 0) {
-                 return response()->json([
-                    'success' => false,
-                    'data' => null,
+                    'data' => $data,
                     'message' => "Promo Code is already used"
                 ], 200);
+            } else {
+                return response()->json([
+                    'success' => true,
+                    'data' => new PromoCodeResource($promoInfo),
+                    'message' => "Successfully Applied Coupon Code"
+                ], 200);
             }
-        }
 
-        return response()->json([
-            'success' => true,
-            'data' => new PromoCodeResource($promoInfo),
-            'message' => "Successfully Applied Coupon Code"
-        ], 200);
+        } else {
+            return response()->json([
+                'success' => false,
+                'data' => $data,
+                'message' => "Promo Code is Inactive or Out of Date Range"
+            ], 200);
+        }
 
     }
 
     public function getAllCoupons(Request $request){
         if ($request->header('Authorization') == ApiController::AUTHORIZATION_TOKEN) {
 
-            $today = date("Y-m-d");
-            $data = PromoCode::where('status', 1)
-                                    ->where('effective_date', '<=', $today)
-                                    ->where('expire_date', '>=', $today)
-                                    ->get();
+            $data = PromoCode::where('status', 1)->where('expire_date', '>=', date("Y-m-d"))->get();
 
             return response()->json([
                 'success' => true,
@@ -226,65 +208,6 @@ class CartController extends Controller
     }
 
     public function cartCheckout(Request $request){
-
-        // calculating coupon discount
-        $discount = 0;
-        $totalOrderAmount = 0;
-        $cartItems = Cart::where('user_unique_cart_no', $request->user_unique_cart_no)->orderBy('id', 'desc')->get();
-        foreach($cartItems as $item){
-            $prodInfo = Product::where('id', $item->product_id)->first();
-            $price = $prodInfo->discount_price > 0 ? $prodInfo->discount_price : $prodInfo->price;
-            $totalOrderAmount = $totalOrderAmount + (1 * $price);
-        }
-        $today = date("Y-m-d");
-
-        $promoInfo = PromoCode::where('code', $request->coupon_code)
-                                ->where('status', 1)
-                                ->where('effective_date', '<=', $today)
-                                ->where('expire_date', '>=', $today)
-                                ->first();
-
-        if($promoInfo){
-
-            if($promoInfo->minimum_order_value && $totalOrderAmount < $promoInfo->minimum_order_value) {
-                return response()->json([
-                    'success' => false,
-                    'message' => "Minimum Order Amount ".$promoInfo->minimum_order_value." is Required"
-                ], 200);
-            }
-
-            $alreadyUsed = Order::where('user_id', auth()->user()->id)
-                                ->where('coupon_code', $request->coupon_code)
-                                ->count();
-
-            if($promoInfo->no_of_usage) {
-                if($alreadyUsed >= $promoInfo->no_of_usage) {
-                    return response()->json([
-                        'success' => false,
-                        'message' => "Promo Code is used maximum time",
-                    ], 200);
-                }
-            }else{
-                if($alreadyUsed > 0) {
-                    return response()->json([
-                        'success' => false,
-                        'message' => "Promo Code is already used",
-                    ], 200);
-                }
-            }
-
-            if($promoInfo->type == 1){
-                $discount = $promoInfo->value;
-            } else {
-                $discount = ($totalOrderAmount*$promoInfo->value)/100;
-            }
-
-        } else {
-            
-        }
-        // calculating coupon discount
-
-
 
         $orderId = Order::insertGetId([
             'order_no' => time().rand(100,999),
@@ -313,10 +236,23 @@ class CartController extends Controller
             'created_at' => Carbon::now()
         ]);
 
+        $totalOrderAmount = 0;
+        $cartItems = Cart::where('user_unique_cart_no', $request->user_unique_cart_no)->orderBy('id', 'desc')->get();
 
         foreach($cartItems as $item){
+
             $prodInfo = Product::where('id', $item->product_id)->first();
             $price = $prodInfo->discount_price > 0 ? $prodInfo->discount_price : $prodInfo->price;
+
+            // $productInfo = Product::where('id', $item->product_id)->first();
+            // if($productInfo && $productInfo->author_id){
+            //     $userInfo = User::where('id', $productInfo->author_id)->first();
+            //     if($userInfo){
+            //         $userInfo->balance = $userInfo->balance + (($price * $productInfo->comission) / 100);
+            //         $userInfo->save();
+            //     }
+            // }
+
             OrderDetails::insert([
                 'order_id' => $orderId,
                 'product_id' => $item->product_id,
@@ -327,9 +263,42 @@ class CartController extends Controller
                 'author_comission' => ($price * $prodInfo->comission) / 100,
                 'created_at' => Carbon::now()
             ]);
+            $totalOrderAmount = $totalOrderAmount + (1 * $price);
         }
 
         Cart::where('user_unique_cart_no', $request->user_unique_cart_no)->delete();
+
+
+        // calculating coupon discount
+        $discount = 0;
+        $promoInfo = PromoCode::where('code', $request->coupon_code)->where('status', 1)->where('effective_date', '<=', date("Y-m-d"))->where('expire_date', '>=', date("Y-m-d"))->first();
+        if($promoInfo){
+
+            $alreadyUsed = Order::where('user_id', auth()->user()->id)->where('coupon_code', $request->coupon_code)->count();
+
+            if($promoInfo->no_of_usage && $promoInfo->no_of_usage > 0){
+                if($alreadyUsed <= $promoInfo->no_of_usage){
+
+                    if($promoInfo->type == 1){
+                        $discount = $promoInfo->value;
+                    } else {
+                        $discount = ($totalOrderAmount*$promoInfo->value)/100;
+                    }
+
+                }
+            } else {
+
+                if($promoInfo->type == 1){
+                    $discount = $promoInfo->value;
+                } else {
+                    $discount = ($totalOrderAmount*$promoInfo->value)/100;
+                }
+
+            }
+
+        }
+        // calculating coupon discount
+
 
         Order::where('id', $orderId)->update([
             'sub_total' => $totalOrderAmount,
@@ -356,65 +325,6 @@ class CartController extends Controller
                 'message' => "Sorry No User Found",
             ], 200);
         }
-
-
-        // calculating coupon discount
-        $discount = 0;
-        $totalOrderAmount = 0;
-        $cartItems = Cart::where('user_unique_cart_no', $request->user_unique_cart_no)->orderBy('id', 'desc')->get();
-        foreach($cartItems as $item){
-            $productInfo = Product::where('id', $item->product_id)->first();
-            $price = $productInfo->discount_price > 0 ? $productInfo->discount_price : $productInfo->price;
-            $totalOrderAmount = $totalOrderAmount + (1 * $price);
-        }
-        $today = date("Y-m-d");
-
-        $promoInfo = PromoCode::where('code', $request->coupon_code)
-                                ->where('status', 1)
-                                ->where('effective_date', '<=', $today)
-                                ->where('expire_date', '>=', $today)
-                                ->first();
-
-        if($promoInfo){
-
-            if($promoInfo->minimum_order_value && $totalOrderAmount < $promoInfo->minimum_order_value) {
-                return response()->json([
-                    'success' => false,
-                    'message' => "Minimum Order Amount ".$promoInfo->minimum_order_value." is Required"
-                ], 200);
-            }
-
-            $alreadyUsed = Order::where('user_id', $userInfo->id)
-                                ->where('coupon_code', $request->coupon_code)
-                                ->count();
-
-            if($promoInfo->no_of_usage) {
-                if($alreadyUsed >= $promoInfo->no_of_usage) {
-                    return response()->json([
-                        'success' => false,
-                        'message' => "Promo Code is used maximum time",
-                    ], 200);
-                }
-            }else{
-                if($alreadyUsed > 0) {
-                    return response()->json([
-                        'success' => false,
-                        'message' => "Promo Code is already used",
-                    ], 200);
-                }
-            }
-
-            if($promoInfo->type == 1){
-                $discount = $promoInfo->value;
-            } else {
-                $discount = ($totalOrderAmount*$promoInfo->value)/100;
-            }
-
-        } else {
-           
-        }
-        // calculating coupon discount
-
 
         $orderId = Order::insertGetId([
             'order_no' => time().rand(100,999),
@@ -443,10 +353,22 @@ class CartController extends Controller
             'created_at' => Carbon::now()
         ]);
 
+        $totalOrderAmount = 0;
+        $cartItems = Cart::where('user_unique_cart_no', $request->user_unique_cart_no)->orderBy('id', 'desc')->get();
 
         foreach($cartItems as $item){
+
             $productInfo = Product::where('id', $item->product_id)->first();
             $price = $productInfo->discount_price > 0 ? $productInfo->discount_price : $productInfo->price;
+
+            // if($productInfo && $productInfo->author_id){
+            //     $userInfo = User::where('id', $productInfo->author_id)->first();
+            //     if($userInfo){
+            //         $userInfo->balance = $userInfo->balance + (($price * $productInfo->comission) / 100);
+            //         $userInfo->save();
+            //     }
+            // }
+
             OrderDetails::insert([
                 'order_id' => $orderId,
                 'product_id' => $item->product_id,
@@ -457,9 +379,27 @@ class CartController extends Controller
                 'author_comission' => ($price * $productInfo->comission) / 100,
                 'created_at' => Carbon::now()
             ]);
+            $totalOrderAmount = $totalOrderAmount + (1 * $price);
         }
 
         Cart::where('user_unique_cart_no', $request->user_unique_cart_no)->delete();
+
+
+        // calculating coupon discount
+        $discount = 0;
+        $promoInfo = PromoCode::where('code', $request->coupon_code)->where('status', 1)->where('effective_date', '<=', date("Y-m-d"))->where('expire_date', '>=', date("Y-m-d"))->first();
+        if($promoInfo){
+            $alreadyUsed = Order::where('user_id', auth()->user()->id)->where('coupon_code', $request->coupon_code)->count();
+            if($alreadyUsed == 0){
+                if($promoInfo->type == 1){
+                    $discount = $promoInfo->value;
+                } else {
+                    $discount = ($totalOrderAmount*$promoInfo->value)/100;
+                }
+            }
+        }
+        // calculating coupon discount
+
 
         Order::where('id', $orderId)->update([
             'sub_total' => $totalOrderAmount,
@@ -574,59 +514,6 @@ class CartController extends Controller
 
     public function checkoutBuyNow(Request $request){
 
-        // calculating coupon discount
-        $discount = 0;
-        $totalOrderAmount = $request->qty * $request->unit_price;
-        $today = date("Y-m-d");
-
-        $promoInfo = PromoCode::where('code', $request->coupon_code)
-                                ->where('status', 1)
-                                ->where('effective_date', '<=', $today)
-                                ->where('expire_date', '>=', $today)
-                                ->first();
-
-        if($promoInfo){
-
-            if($promoInfo->minimum_order_value && $totalOrderAmount < $promoInfo->minimum_order_value) {
-                return response()->json([
-                    'success' => false,
-                    'message' => "Minimum Order Amount ".$promoInfo->minimum_order_value." is Required"
-                ], 200);
-            }
-
-            $alreadyUsed = Order::where('user_id', auth()->user()->id)
-                                ->where('coupon_code', $request->coupon_code)
-                                ->count();
-
-            if($promoInfo->no_of_usage) {
-                if($alreadyUsed >= $promoInfo->no_of_usage) {
-                    return response()->json([
-                        'success' => false,
-                        'message' => "Promo Code is used maximum time",
-                    ], 200);
-                }
-            }else{
-                if($alreadyUsed > 0) {
-                    return response()->json([
-                        'success' => false,
-                        'message' => "Promo Code is already used",
-                    ], 200);
-                }
-            }
-
-            if($promoInfo->type == 1){
-                $discount = $promoInfo->value;
-            } else {
-                $discount = ($totalOrderAmount*$promoInfo->value)/100;
-            }
-
-        } else {
-            
-        }
-        // calculating coupon discount
-
-
-
         $orderId = Order::insertGetId([
             'order_no' => time().rand(100,999),
             'user_id' => auth()->user()->id,
@@ -654,8 +541,18 @@ class CartController extends Controller
             'created_at' => Carbon::now()
         ]);
 
+        $totalOrderAmount = 0;
+
         $productInfo = Product::where('id', $request->product_id)->first();
         $productPrice = $productInfo->discount_price > 0 ? $productInfo->discount_price : $productInfo->price;
+
+        // if($productInfo && $productInfo->author_id){
+        //     $userInfo = User::where('id', $productInfo->author_id)->first();
+        //     if($userInfo){
+        //         $userInfo->balance = $userInfo->balance + (($productPrice * $productInfo->comission) / 100);
+        //         $userInfo->save();
+        //     }
+        // }
 
         OrderDetails::insert([
             'order_id' => $orderId,
@@ -674,6 +571,25 @@ class CartController extends Controller
             'author_comission' => ($productPrice * $productInfo->comission) / 100,
             'created_at' => Carbon::now()
         ]);
+        $totalOrderAmount = $totalOrderAmount + ($request->qty * $request->unit_price);
+
+
+
+
+        // calculating coupon discount
+        $discount = 0;
+        $promoInfo = PromoCode::where('code', $request->coupon_code)->where('status', 1)->where('effective_date', '<=', date("Y-m-d"))->where('expire_date', '>=', date("Y-m-d"))->first();
+        if($promoInfo){
+            $alreadyUsed = Order::where('user_id', auth()->user()->id)->where('coupon_code', $request->coupon_code)->count();
+            if($alreadyUsed == 0){
+                if($promoInfo->type == 1){
+                    $discount = $promoInfo->value;
+                } else {
+                    $discount = ($totalOrderAmount*$promoInfo->value)/100;
+                }
+            }
+        }
+        // calculating coupon discount
 
         Order::where('id', $orderId)->update([
             'sub_total' => $totalOrderAmount,

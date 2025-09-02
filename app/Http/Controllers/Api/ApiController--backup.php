@@ -2499,8 +2499,7 @@ class ApiController extends BaseController
 
     public function singleBookGift(Request $request){
         
-    $userId = auth()->user()->id;
-    if ($userId) {
+    if ($request->header('Authorization') == ApiController::AUTHORIZATION_TOKEN) {
             $userInfo = User::where('email', $request->username)->orWhere('phone', $request->username)->first();
             if(!$userInfo){
                 return response()->json([
@@ -2563,21 +2562,15 @@ class ApiController extends BaseController
                 } else {
                     $discount = ($totalOrderAmount*$promoInfo->value)/100;
                 }
-                
-                
-    
             }
-            
-            
-                         // calculating coupon discount
+            // calculating coupon discount
 
-                Order::where('id', $orderId)->update([
-                    'sub_total' => $totalOrderAmount,
-                    'coupon_code' => $request->coupon_code,
-                    'discount' => $discount,
-                    'total' => $totalOrderAmount - $discount,
-                ]);
-           
+            Order::where('id', $orderId)->update([
+                'sub_total' => $totalOrderAmount,
+                'coupon_code' => $request->coupon_code,
+                'discount' => $discount,
+                'total' => $totalOrderAmount - $discount,
+            ]);
 
             return response()->json([
                 'success' => true,
@@ -2585,7 +2578,11 @@ class ApiController extends BaseController
                 'data' => new OrderResource(Order::where('id', $orderId)->first())
             ], 200);
 
-
+        
+        
+        
+        
+        
         } else {
             return response()->json([
                 'success' => false,

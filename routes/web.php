@@ -16,6 +16,13 @@ use App\Http\Controllers\BkashPaymentController;
 use App\Http\Controllers\DashboardController;
 
 
+use App\Http\Controllers\SitemapController;
+Route::get('/sitemap.xml', [SitemapController::class, 'booksIndex'])->name('sitemaps.index');
+Route::get('/sitemaps/books-{n}/file.xml', [SitemapController::class, 'booksFile'])->whereNumber('n')->name('sitemaps.books.file');
+Route::get('/sitemaps/authors-{n}/file.xml', [SitemapController::class, 'authorsFile'])->whereNumber('n')->name('sitemaps.authors.file');
+Route::get('/sitemaps/publishers-{n}/file.xml', [SitemapController::class, 'publishersFile'])->whereNumber('n')->name('sitemaps.publishers.file');
+
+
 // Auth::routes();
 Auth::routes([
     'login' => false,
