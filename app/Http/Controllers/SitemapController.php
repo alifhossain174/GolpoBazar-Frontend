@@ -89,6 +89,7 @@ class SitemapController extends Controller
                 $loc = URL::to('/books/' . $book->slug);
                 $urls .= '<url>'
                     . '<loc>' . htmlspecialchars($loc, ENT_XML1) . '</loc>'
+                    . '<lastmod>'.date("Y-m-d").'</lastmod>'
                     . '<changefreq>weekly</changefreq>'
                     . '</url>';
             }
@@ -126,10 +127,9 @@ class SitemapController extends Controller
                 // Use your named route to build the correct URL:
                 // Route::get('/author/books/{slug}', ...)->name('AuthorBooks');
                 $loc = route('AuthorBooks', ['slug' => $author->id], true);
-                $lastmod = $author->updated_at ? date("Y-m-d", strtotime($author->updated_at)) : null;
                 $urls .= '<url>'
                     . '<loc>' . htmlspecialchars($loc, ENT_XML1) . '</loc>'
-                    . ($lastmod ? "<lastmod>{$lastmod}</lastmod>" : '')
+                    . '<lastmod>'.date("Y-m-d").'</lastmod>'
                     . '<changefreq>weekly</changefreq>'
                     . '</url>';
             }
@@ -162,11 +162,10 @@ class SitemapController extends Controller
             foreach ($publishers as $publisher) {
                 // Use your named route: /publisher/books/{slug}  name: PublisherBooks
                 $loc = route('PublisherBooks', ['slug' => $publisher->slug], true);
-                $lastmod = $publisher->updated_at ? date("Y-m-d", strtotime($publisher->updated_at)) : null;
 
                 $urls .= '<url>'
                     . '<loc>' . htmlspecialchars($loc, ENT_XML1) . '</loc>'
-                    . ($lastmod ? "<lastmod>{$lastmod}</lastmod>" : '')
+                    . '<lastmod>'.date("Y-m-d").'</lastmod>'
                     . '<changefreq>weekly</changefreq>'
                     . '</url>';
             }
